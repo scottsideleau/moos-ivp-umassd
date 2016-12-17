@@ -30,7 +30,6 @@ To build without using the supplied script, execute the following commands
 within this directory:
 
   ```bash
-  $ mkdir -p build
   $ cd build
   $ cmake ../
   $ make
@@ -42,7 +41,7 @@ The moos-ivp-umassd binaries files should be added to your path to allow them
 to be launched from pAntler. 
 
   ```bash
-  export PATH=$PATH:/path/to/moos-ivp-umassd
+  export PATH=$PATH:/path/to/moos-ivp-umassd/bin
   ```
 
 In order for generated IvP Behaviors to be recognized by the IvP Helm, you
