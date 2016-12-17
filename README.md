@@ -4,19 +4,19 @@ MOOS-IvP applications and behaviors maintained by UMassD staff and students.
 ## Directory Structure
 The directory structure for moos-ivp-umassd is decribed below:
 
-File/Directory   | Description
+Directory/File   | Description
 ---              | ---
-bin              | Directory for generated executable files
-build            | Directory for build object files
-build_*.sh       | Script for building moos-ivp-umassd
+bin/             | Directory for generated executable files
+build/           | Directory for build object files
+data/            | Directory for storing data
+lib/             | Directory for generated library files
+missions/        | Directory for mission files
+scripts/         | Directory for script files
+src/             | Directory for source code
+build.sh         | Script for building moos-ivp-umassd
 CMakeLists.txt   | CMake configuration file for the project
-data             | Directory for storing data
-lib              | Directory for generated library files
 LICENSE          | File containing re-use and distribution terms
-missions         | Directory for mission files
-README.m         | Contains helpful information - (this file).
-scripts          | Directory for script files
-src              | Directory for source code
+README.md        | Contains helpful information - (this file).
 
 ## Build Instructions
 To build on Linux and Apple platforms, execute the build script within this
