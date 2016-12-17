@@ -1,0 +1,11 @@
+//----------------------------------------------------------------------------
+// Behavior (BHV) File for UMassD Operations (generated)
+#include all.def
+#include plugs/bhv_initialize.plug
+#include plugs/bhv_modes.plug
+#include plugs/bhv_deploy_survey.plug
+#include plugs/bhv_return.plug
+#ifdef simulation
+    #include plugs/bhv_hsline.plug
+#endif
+

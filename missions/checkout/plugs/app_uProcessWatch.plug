@@ -1,0 +1,9 @@
+//----------------------------------------------------------------------------
+ProcessConfig = uProcessWatch
+{
+    AppTick   = 1
+    CommsTick = 5
+
+    watch_all = antler
+}
+

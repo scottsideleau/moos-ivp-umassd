@@ -1,0 +1,25 @@
+//----------------------------------------------------------------------------
+ProcessConfig = uSimMarine
+{
+    AppTick   = 10
+    CommsTick = 10
+
+#ifdef START_X
+    START_X       = $(START_X)
+#else
+    START_X       = 0
+#endif
+#ifdef START_Y
+    START_Y       = $(START_Y)
+#else
+    START_Y       = 0
+#endif
+    START_SPEED   = 0
+    START_HEADING = 180
+
+    MAX_TRANS_VEL = 5.0
+    MAX_ROT_VEL   = 0.6
+
+    PREFIX        = NAV
+}
+
