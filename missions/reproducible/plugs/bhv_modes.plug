@@ -1,0 +1,25 @@
+//----------------------------------------------------------------------------
+// Modes
+//----------------------------------------------------------------------------
+
+set MODE = INACTIVE 
+{
+  DEPLOY = false
+  RETURN = false
+  VEHICLE_UNDERWAY = false
+}
+
+set MODE = SURVEY 
+{
+  DEPLOY = true
+  RETURN = false
+  VEHICLE_UNDERWAY = true
+}
+
+set MODE = RETURN 
+{
+  DEPLOY = true
+  RETURN = true
+  VEHICLE_UNDERWAY = true
+}
+

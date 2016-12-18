@@ -1,0 +1,15 @@
+//----------------------------------------------------------------------------
+ProcessConfig = pLogger
+{
+    AppTick   = 10
+    CommsTick = 10
+
+    File            = $(VEHICLE_NAME)_   //Usually matches the community name.
+    PATH            = ./data_from_runs/
+    SyncLog         = true @ 0.2
+    AsyncLog        = true
+    FileTimeStamp   = true
+    WildCardLogging = true
+    //WildCardOmitPattern = DB_TIME,DB_UPTIME,DB_CLIENTS
+}
+
