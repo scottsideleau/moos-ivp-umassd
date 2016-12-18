@@ -1,0 +1,11 @@
+//----------------------------------------------------------------------------
+ProcessConfig = pMoosKiller
+{
+    AppTick   = 1
+    CommsTick = 1
+
+    //Configuration Parameters
+    moos_bin = /opt/moos-ivp/bin
+    kill_var = SEPPUKU
+}
+
