@@ -1,0 +1,127 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LOG FILE:       ./data_from_runs/iver__28_12_2015_____21_37_38/iver__28_12_2015_____21_37_38._moos
+%% FILE OPENED ON  Thu Jan  1 00:00:00 1970
+%% LOGSTART               1451338657.37
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//----------------------------------------------------------------------------
+// MOOS File for UMassD Operations (generated)
+
+ServerHost = localhost
+ServerPort = 9000
+
+Simulator = false
+
+Community = iver
+
+LatOrigin  =  41.6795   //UMassD CIE (formerly ATMC), Fall River, MA 
+LongOrigin = -71.1282
+
+
+//----------------------------------------------------------------------------
+ProcessConfig = ANTLER
+{
+    MSBetweenLaunches = 200
+
+    //Essential
+    Run = MOOSDB            @ NewConsole = false
+    Run = iOceanServerComms @ NewConsole = false
+    Run = pHelmIvP          @ NewConsole = false
+
+    //Recommended
+    Run = pNodeReporter     @ NewConsole = false
+    Run = uProcessWatch     @ NewConsole = false
+
+    //Logging
+    Run = pLogger           @ NewConsole = false
+}
+
+
+//----------------------------------------------------------------------------
+ProcessConfig = iOceanServerComms
+{
+    AppTick   = 1
+    CommsTick = 5
+	
+    //Frontseat Serial Port Configuration
+    port        = /dev/ttyS12
+    BaudRate    = 19200
+    handshaking = false
+    streaming   = false
+	
+    //Use Local UTM coordinate system?
+    UTM = false
+
+    //Request data from DVL?
+    DVL = true
+
+    //Request general CTD data?
+    CTD = true
+
+    //Request data string from YSI Sonde?
+    YSI = false
+
+    //Are we in salt water?  (Used for YSI sound velocity calculation.)
+    SaltWater = false
+
+    //Post NAV_* variables?
+    PostNav = true
+
+    //Constraints
+    CommTimeout =  2 //seconds
+    ServoFilter =  0 //ticks
+}
+
+
+//----------------------------------------------------------------------------
+ProcessConfig = pHelmIvP
+{
+    AppTick   = 2
+    CommsTick = 5
+
+    Domain = course,0:359:7200
+    Domain = speed,0:2:400
+    Domain = depth,0:100:2000:optional
+	
+    Behaviors = current.bhv
+}
+
+
+//------------------------------------------------------------------------
+ProcessConfig = pNodeReporter
+{
+    AppTick   = 5
+    CommsTick = 5
+
+    VESSEL_TYPE = AUV
+}
+
+
+//----------------------------------------------------------------------------
+ProcessConfig = uProcessWatch
+{
+    AppTick   = 1
+    CommsTick = 5
+
+    watch_all = antler
+}
+
+
+//----------------------------------------------------------------------------
+ProcessConfig = pLogger
+{
+    AppTick   = 10
+    CommsTick = 10
+
+    File            = iver_   //Usually matches the community name.
+    PATH            = ./data_from_runs/
+    SyncLog         = true @ 0.2
+    AsyncLog        = true
+    FileTimeStamp   = true
+    WildCardLogging = true
+    //WildCardOmitPattern = DB_TIME,DB_UPTIME,DB_CLIENTS
+}
+
+
+
+
+

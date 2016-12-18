@@ -1,0 +1,90 @@
+//----------------------------------------------------------------------------
+// Behavior (BHV) File for UMassD Operations (generated)
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   VEHICLE_UNDERWAY = false
+
+//----------------------------------------------------------------------------
+// Modes
+//----------------------------------------------------------------------------
+
+set MODE = INACTIVE 
+{
+  DEPLOY = false
+  RETURN = false
+  VEHICLE_UNDERWAY = false
+}
+
+set MODE = SURVEY 
+{
+  DEPLOY = true
+  RETURN = false
+  VEHICLE_UNDERWAY = true
+}
+
+set MODE = RETURN 
+{
+  DEPLOY = true
+  RETURN = true
+  VEHICLE_UNDERWAY = true
+}
+
+
+//----------------------------------------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+  name      = points_survey
+  pwt       = 100
+  condition = MODE == SURVEY
+  endflag   = RETURN = true
+  perpetual = true
+  duration  = no-time-limit
+  updates   = SURVEY_POINTS
+
+          lead = 8
+   lead_damper = 1
+         speed = 1.28611
+        radius = 2.0
+     nm_radius = 2.0
+        points = 60,-40:60,-160:150,-160:180,-100:150,-40
+        repeat = 0
+  visual_hints = nextpt_color=red, nextpt_lcolor=green
+  visual_hints = vertex_color=yellow, line_color=white
+  visual_hints = vertex_size=2, edge_size=1
+}
+
+//----------------------------------------------------------------------------
+Behavior = BHV_ConstantDepth
+{
+  name      = depth_survey
+  pwt       = 100
+  condition = MODE == SURVEY
+  updates = SURVEY_DEPTH
+  duration  = no-time-limit
+
+  depth = 1.25
+}
+
+//----------------------------------------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = MODE == RETURN
+  perpetual  = true
+  duration   = no-time-limit
+  updates    = RETURN_POINTS
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = VEHICLE_UNDERWAY = false
+
+         speed = 1.28611
+        radius = 2.0
+     nm_radius = 2.0
+        points = 45.577168,-22.230798
+}
+
+
+
+

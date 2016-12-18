@@ -1,0 +1,13 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LOG FILE:       ./data_from_runs/iver__28_12_2015_____21_37_38/iver__28_12_2015_____21_37_38.ylog
+%% FILE OPENED ON  Thu Jan  1 00:00:00 1970
+%% LOGSTART               1451338657.37
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+0.5555751  MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: ManualOverride 
+7.068259   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: NothingToDo 
+7.568822   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: NothingToDo 
+34.60299   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: clear 
+353.9759   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: MissingDecVars:speed,course 
+354.48     MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: clear 
+446.0652   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: NothingToDo 
+446.5647   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: NothingToDo 

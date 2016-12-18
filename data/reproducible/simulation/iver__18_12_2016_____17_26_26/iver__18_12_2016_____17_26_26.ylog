@@ -1,0 +1,12 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LOG FILE:       ./data_from_runs/iver__18_12_2016_____17_26_26/iver__18_12_2016_____17_26_26.ylog
+%% FILE OPENED ON  Wed Dec 31 19:00:00 1969
+%% LOGSTART               14820999866.9
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-0.005411148 MOOS_DEBUG           pMarinePID           Paused Due To Tardy HELM Input: THRUST=0 
+6.2132     MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: clear 
+334.9866   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: MissingDecVars:speed,course 
+335.5375   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: clear 
+417.9397   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: NothingToDo 
+418.4864   MOOS_DEBUG           pHelmIvP             pHelmIvP AllStop: NothingToDo 
+420.6122   MOOS_DEBUG           pMarinePID           Paused Due To Tardy HELM Input: THRUST=0 
