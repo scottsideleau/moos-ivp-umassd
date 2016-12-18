@@ -1,6 +1,7 @@
 #! /bin/bash
 
 # Start by launching the simulation environment
+echo "Starting the MOOS-IvP environment."
 source simulation_launch.sh
 
 # Wait for the IvP Helm to start
@@ -10,13 +11,17 @@ done
 
 # Start the mission (quietly)
 sleep 1
+echo "Starting the MOOS-IvP mission."
+source simulation_launch.sh
 source scripts/engage_ivphelm.sh >& /dev/null &
 source scripts/release_control.sh >& /dev/null &
 
 # Check if mission is still running
 while [ $(pgrep pAntler) ]; do
-  echo "still running..."
+  echo "MOOS-IvP mission running..."
   sleep 1
 done
+echo "Completed the MOOS-IvP mission."
 
-echo "stopped"
+# Post-process the MOOS-IvP mission
+
