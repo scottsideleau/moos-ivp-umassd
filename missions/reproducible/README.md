@@ -42,7 +42,7 @@ A. Run the workflow using MOOS-IvP on local machine
 	brew install git cmake gnuplot
 	```
 
-	2. Install [MOOS-IvP](http://moos-ivp.org) on your local computer.
+  2. Install [MOOS-IvP](http://moos-ivp.org) on your local computer.
 
   ```bash
 	cd /opt && \
@@ -57,7 +57,7 @@ A. Run the workflow using MOOS-IvP on local machine
   ./build.sh
 	```
 
-	3. Install moos-ivp-umassd on your local computer.
+  3. Install moos-ivp-umassd on your local computer.
 
 	```bash
 	cd /opt && \
@@ -66,21 +66,21 @@ A. Run the workflow using MOOS-IvP on local machine
   ./build.sh
 	```
 
-	4. Add necessary environmental variables.
+  4. Add necessary environmental variables.
 
 	```bash
 	export PATH=$PATH:/opt/moos-ivp/bin:/opt/moos-ivp-umassd/bin
 	export IVP_BEHAVIOR_DIRS:$IVP_BEHAVIOR_DIRS:/opt/moos-ivp-umassd/lib
 	```
 
-	4. Run the workflow.
+  5. Run the workflow.
 
 	```bash
 	cd missions/reproducible
 	./repro_launch.sh
 	```
 
-	5. Inspect the artifacts generated (note the XY plot, temp_plot.png).
+  6. Inspect the artifacts generated (note the XY plot, temp_plot.png).
 
 	```bash
 	ls -alh data_from_runs/iver*
@@ -91,15 +91,15 @@ B. Run the workflow within a Docker container
   NOTE: These instructions assume a [MacOS](http://www.apple.com/macos/)
   10.11+ environment with [Homebrew](http://brew.sh/index.html).
 
-	1. Install [Docker](https://www.docker.com) on your local computer.
+  1. Install [Docker](https://www.docker.com) on your local computer.
 
 	```bash
 	brew cask install docker
 	```
 
-	2. Run Docker by selecting it from your Applciations/ directory.
+  2. Run Docker by selecting it from your Applciations/ directory.
 
-	3. Run the workflow and copy the artifact to local directory.
+  3. Run the workflow and copy the artifact to local directory.
 
 	```bash
 	docker pull scottsideleau
@@ -121,14 +121,14 @@ C. Compare the results and verify reproducibility
 	NOTE: These instructions assume a [MacOS](http://www.apple.com/macos/)
   10.11+ environment with [Homebrew](http://brew.sh/index.html).
 
-	1. Install dependencies for image file comparison.
+  1. Install dependencies for image file comparison.
 
 	```bash
 	brew install python3 opencv3
 	pip3 install scipy scikit-image matplotlib opencv-python
 	```
 
-	2. Run the comparison script.
+  2. Run the comparison script.
 	```bash
 	cd ../../scripts/compare-two-images
 	python3 compare.py
