@@ -53,10 +53,16 @@ inwater = cv2.imread(
 sim = cv2.imread(
     "../../data/reproducible/simulation/iver__18_12_2016_____17_26_26/simulation.png"
     )
+docker = cv2.imread(
+    "../../data/reproducible/docker/repro.png"
+    )
 
 # convert the images to grayscale
 inwater = cv2.cvtColor(inwater, cv2.COLOR_BGR2GRAY)
 sim = cv2.cvtColor(sim, cv2.COLOR_BGR2GRAY)
+docker = cv2.cvtColor(docker, cv2.COLOR_BGR2GRAY)
 
 # compare the images
+compare_images(sim, docker, "Sim (MacOS) v. Docker (Debian 8)")
 compare_images(sim, inwater, "Sim (MacOS) v. In-water (Iver2-167)")
+
