@@ -68,7 +68,7 @@ A. Run the workflow using MOOS-IvP on local machine
 
 	4. Add necessary environmental variables.
 
-	``` bash
+	```bash
 	export PATH=$PATH:/opt/moos-ivp/bin:/opt/moos-ivp-umassd/bin
 	export IVP_BEHAVIOR_DIRS:$IVP_BEHAVIOR_DIRS:/opt/moos-ivp-umassd/lib
 	```
