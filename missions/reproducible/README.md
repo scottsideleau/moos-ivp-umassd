@@ -45,7 +45,7 @@ A. Run the workflow using MOOS-IvP on local machine
   2. Install [MOOS-IvP](http://moos-ivp.org) on your local computer.
 
   ```bash
-	cd /opt && \
+  cd /opt && \
   git clone https://github.com/moos-ivp/MOOS-IvP-releases.git && \
   mv MOOS-IvP-releases moos-ivp && \
   cd moos-ivp && \
@@ -102,7 +102,7 @@ B. Run the workflow within a Docker container
   3. Run the workflow and copy the artifact to local directory.
 
 	```bash
-	docker pull scottsideleau
+	docker pull scottsideleau/moos-ivp-umassd
 	docker run scottsideleau/moos-ivp-umassd:reproducible
 	docker cp `docker ps -alq`:/root/artifacts/repro.png repro.png
 	```
