@@ -118,7 +118,7 @@ B. Run the workflow within a Docker container
 
 C. Compare the results and verify reproducibility
 
-	NOTE: These instructions assume a [MacOS](http://www.apple.com/macos/)
+  NOTE: These instructions assume a [MacOS](http://www.apple.com/macos/)
   10.11+ environment with [Homebrew](http://brew.sh/index.html).
 
   1. Install dependencies for image file comparison.
