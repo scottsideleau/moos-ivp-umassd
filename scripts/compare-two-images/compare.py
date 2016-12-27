@@ -65,4 +65,5 @@ docker = cv2.cvtColor(docker, cv2.COLOR_BGR2GRAY)
 # compare the images
 compare_images(sim, docker, "Sim (MacOS) v. Docker (Debian 8)")
 compare_images(sim, inwater, "Sim (MacOS) v. In-water (Iver2-167)")
+compare_images(docker, inwater, "Docker (Debian 8) v. In-water (Iver2-167)")
 
