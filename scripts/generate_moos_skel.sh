@@ -29,8 +29,6 @@ mkdir $2$1
 # Go into the new directory and make skeleton files
 cd $2$1
 
-touch ChangeLog
-
 cat >> CMakeLists.txt <<EOF
 #--------------------------------------------------------
 # The CMakeLists.txt for:               $2$1
@@ -50,13 +48,13 @@ TARGET_LINK_LIBRARIES($2$1
 EOF
 
 
-cat >> ${1}.h <<EOF
+cat >> $1.h <<EOF
 /****************************************************************************/
 /* $1.h */
 /****************************************************************************/
 
-#ifndef MOOS_APP_${1^^}_H_
-#define MOOS_APP_${1^^}_H_
+#ifndef MOOS_APP_$1_H_
+#define MOOS_APP_$1_H_
 
 // MOOS Includes
 #include "MOOS/libMOOS/App/MOOSApp.h"
@@ -100,11 +98,12 @@ class CMOOS$1 : public CMOOSApp
     void DoRegistrations();
 };
 
-#endif // #ifndef MOOS_APP_${1^^}_H_
+#endif // #ifndef MOOS_APP_$1_H_
 
 EOF
 
-cat >> ${1}Main.cpp <<EOF
+
+cat >> $1Main.cpp <<EOF
 /****************************************************************************/
 /* $1Main.cpp */
 /****************************************************************************/
@@ -145,7 +144,8 @@ int main(int argc , char *argv[])
 
 EOF
 
-cat >> $2${1}.moos <<EOF
+
+cat >> $2$1.moos <<EOF
 //----------------------------------------------------------------------------
 ProcessConfig = $2$1
 {
@@ -157,7 +157,8 @@ ProcessConfig = $2$1
 
 EOF
 
-cat >> ${1}.cpp <<EOF
+
+cat >> $1.cpp <<EOF
 /****************************************************************************/
 /* $1.cpp */
 /****************************************************************************/
@@ -308,6 +309,7 @@ void CMOOS$1::DoRegistrations()
 }
 
 EOF
+
 
 # Main
 echo "AppName: $1"
