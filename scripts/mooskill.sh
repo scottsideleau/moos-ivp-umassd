@@ -1,5 +1,5 @@
 #! /bin/bash
 
-pgrep pAntler | xargs -r -n1 -i ps -o pid --ppid {} | grep -v PID | sort -nr | xargs -r kill
+pgrep pAntler | xargs -n1 -I ps -o pid --ppid {} | grep -v PID | sort -nr | xargs kill
 echo "      * Terminated all MOOS communities"
 
