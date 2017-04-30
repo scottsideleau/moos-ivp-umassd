@@ -91,8 +91,6 @@ class CMOOS$1 : public CMOOSApp
     double dfLatOrigin;
     double dfLonOrigin;
     double dfTimeNow;
-    double dfNavX;
-    bool bNavXisCurrent;
 
     // Functions
     void DoRegistrations();
