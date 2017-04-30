@@ -1,8 +1,16 @@
 /**
+ * fmemopen.h
+ *  by Scott R. Sideleau <scott@sideleau.com>
+ *      29-APR-2017
+ * 
+ * Derived from fmemopen_osx:
+ *  fmemopen.h
+ *  fmemopen.c
+ *
  * A BSD port of the fmemopen Linux method using funopen.
  *
- *  Created by Maksym Kryva on 12-FEB-2017.
- *  https://github.com/mkryva/fmemopen_osx
+ * Created by Maksym Kryva on 12-FEB-2017.
+ * https://github.com/mkryva/fmemopen_osx
  *
  * man docs for fmemopen:
  * http://linux.die.net/man/3/fmemopen
