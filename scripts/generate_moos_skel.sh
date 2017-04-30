@@ -235,8 +235,7 @@ bool CMOOS$1::OnNewMail(MOOSMSG_LIST &NewMail)
 
 
 /*************************************************************************//**
- * Overloaded function called Every 1/Apptick to collect all sensor data from
- * and issue directions the Ocean-Server Frontseat Driver.
+ * Overloaded function called every 1/Apptick to process data and do work.
  */
 bool CMOOS$1::Iterate()
 {   
@@ -262,8 +261,15 @@ bool CMOOS$1::OnStartUp()
   // Get the latitude origin from the .moos file
   if (m_MissionReader.GetValue("LatOrigin", sVal)) 
   {
-    dfLatOrigin = atof(sVal.c_str());
-  } 
+    char* end;
+    dfLatOrigin = std::strtod(sVal.c_str(), &end);
+    if (!(*end == '\0'))
+    {
+      MOOSTrace("LatOrigin not set; unexpected end of string - FAIL\n");
+      MOOSPause(5000);
+      exit(1);
+    } 
+  }
   else 
   {
     MOOSTrace("LatOrigin not set - FAIL\n");
@@ -274,8 +280,15 @@ bool CMOOS$1::OnStartUp()
   // Get the longitude origin from the .moos file
   if (m_MissionReader.GetValue("LongOrigin", sVal)) 
   {
-    dfLonOrigin = atof(sVal.c_str());
-  } 
+    char* end;
+    dfLonOrigin = std::strtod(sVal.c_str(), &end);
+    if (!(*end == '\0'))
+    {
+      MOOSTrace("LonOrigin not set; unexpected end of string - FAIL\n");
+      MOOSPause(5000);
+      exit(1);
+    } 
+  }
   else 
   {
     MOOSTrace("LongOrigin not set - FAIL\n");

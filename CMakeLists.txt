@@ -2,8 +2,6 @@
 # FILE:  moos-ivp-umassd/CMakeLists.txt
 # DATE:  2015/12/22
 # INFO:  Top-level CMakeLists.txt file for the moos-ivp-umassd project
-# NAME:  Maintained by Mike Benjamin - Original setup by Christian Convey
-#        Chris Gagner, and tips borrowed from Dave Billin
 #===========================================================================
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
@@ -28,6 +26,13 @@ SET( RUNTIME_OUTPUT_DIRECTORY "${IVP_UMASSD_BIN_DIR}"  CACHE PATH "" )
 #=============================================================================
 find_package(MOOS 10.0)
 INCLUDE_DIRECTORIES(${MOOS_INCLUDE_DIRS})
+
+#===============================================================================
+# FINDING MOOSGeodesy' HEADERS AND LIBRARIES...
+#===============================================================================
+find_package(MOOSGeodesy)
+include_directories(${MOOSGeodesy_INCLUDE_DIRS})
+link_directories(${MOOSGeodesy_LIBRARY_PATH})
 
 #=============================================================================
 # Find the "moos-ivp" base directory
@@ -82,17 +87,33 @@ ELSE( ${WIN32} )
    # Force -fPIC because gcc complains when we don't use it with x86_64 code.
    # Note sure why: -fPIC should only be needed for shared objects, and
    # AFAIK, CMake gets that right when building shared objects. -CJC
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -g")
-   IF(CMAKE_COMPILER_IS_GNUCXX)
-      # Flags for the GNU C++ Compiler
-      SET( WALL_ON OFF CACHE BOOL 
-         "tell me about all compiler warnings (-Wall) ")
-      IF(WALL_ON)
-         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" -C++11)
-      ENDIF( WALL_ON)
-   ELSE(CMAKE_COMPILER_IS_GNUCXX)
-    
-   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
+   include(CheckCXXCompilerFlag)
+   CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+   CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+   if(COMPILER_SUPPORTS_CXX11)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+     message("${CMAKE_CXX_COMPILER} supports: -std=c++11")
+   elseif(COMPILER_SUPPORTS_CXX0X)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+     message("${CMAKE_CXX_COMPILER} supports: -std=c++0x")
+   else()
+     message("${CMAKE_CXX_COMPILER} has no C++11 support.")
+     message(">> Please use a different C++ compiler.")
+   endif()
+
+   SET(WALL_ON ON CACHE BOOL 
+     "tell me about all compiler warnings (-Wall)")
+   IF(WALL_ON)
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+   ENDIF(WALL_ON)
+
+   SET( DEBUG_ON ON CACHE BOOL
+     "build with debug symbols (-g)")
+   IF(DEBUG_ON)
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+   ENDIF(DEBUG_ON)
 
 ENDIF( ${WIN32} )
 
