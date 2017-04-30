@@ -11,6 +11,17 @@ extern "C"
   #include "crypto-aes.h"
 }
 
+// Standard Includes
+#include <cstdio>
+
+// MacOS Includes
+#ifdef __APPLE__
+  extern "C"
+  {
+    #include "MacOS/fmemopen.h"
+  }
+#endif
+
 
 /*************************************************************************//**
  * A constructor for the WolfEncrypt object.
@@ -86,7 +97,14 @@ bool CMOOSWolfEncrypt::OnNewMail(MOOSMSG_LIST &NewMail)
  */
 bool CMOOSWolfEncrypt::Iterate()
 {   
-  // Main
+  FILE* ciphertext;
+  FILE* plaintext;
+
+  std::string sPlaintext = "Hello, World!";
+  plaintext = fmemopen(static_cast<void*>(&sPlaintext), sPlaintext.length(), "r");
+
+  AesEncrypt(&aes, (unsigned char*)sPassword.c_str(), nKeyLength, plaintext, 
+      ciphertext);
 
 
   /* Success */
