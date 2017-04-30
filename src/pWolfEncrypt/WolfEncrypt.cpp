@@ -88,6 +88,7 @@ bool CMOOSWolfEncrypt::Iterate()
 {   
   // Main
 
+
   /* Success */
   return true;        
 }
@@ -155,6 +156,12 @@ bool CMOOSWolfEncrypt::OnStartUp()
   if (m_MissionReader.GetConfigurationParam("key_length", sVal)) 
   {
     nKeyLength = std::stoi(sVal);;
+    if(SizeCheck(nKeyLength) != 0)
+    {
+      MOOSTrace("key_length not one of 128, 192, or 256 - FAIL\n");
+      MOOSPause(5000);
+      exit(1);
+    }
   } 
   else 
   {

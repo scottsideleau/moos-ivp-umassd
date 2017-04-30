@@ -24,6 +24,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
+#ifndef __WOLFSSL__CRYPTO_AES__
+#define __WOLFSSL__CRYPTO_AES__
+
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
@@ -239,3 +242,4 @@ int SizeCheck(int size)
     return ret;
 }
 
+#endif //__WOLFSSL__CRYPTO_AES__

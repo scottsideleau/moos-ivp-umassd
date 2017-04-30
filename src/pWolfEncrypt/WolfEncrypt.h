@@ -9,6 +9,9 @@
 #include "MOOS/libMOOS/MOOSLib.h"
 #include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 
+// WolfSSL Includes
+#include <wolfssl/wolfcrypt/aes.h>
+
 
 /*************************************************************************//**
  * Class that extends CMOOSApp to produce pWolfEncrypt.
@@ -42,8 +45,9 @@ class CMOOSWolfEncrypt : public CMOOSApp
     double dfLatOrigin;
     double dfLonOrigin;
     double dfTimeNow;
-    double dfNavX;
-    bool bNavXisCurrent;
+
+    // WolfSSL variables
+    Aes aes;
 
     // Functions
     void DoRegistrations();
