@@ -135,8 +135,6 @@ bool CMOOSMoosKiller::OnStartUp()
   // Get the user-defined MOOS/bin path
   if (m_MissionReader.GetConfigurationParam("moos_bin", sVal))
   {
-    std::transform(sVal.begin(), sVal.end(), sVal.begin(), \
-        (int(*)(int)) ::tolower);    //Force lower case.
     sMoosBin = sVal;
   }
 
