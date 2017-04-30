@@ -1,0 +1,11 @@
+//----------------------------------------------------------------------------
+ProcessConfig = pWolfEncrypt
+{
+  AppTick   = 1
+  CommsTick = 5
+
+  //Configuration Parameters
+  key_length = 256
+  password   = cYb3r$3cUr3!
+}
+
