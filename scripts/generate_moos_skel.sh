@@ -58,7 +58,7 @@ cat >> $1.h <<EOF
 
 // MOOS Includes
 #include "MOOS/libMOOS/App/MOOSApp.h"
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+//#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 
 
 /*************************************************************************//**
@@ -83,13 +83,13 @@ class CMOOS$1 : public CMOOSApp
 
   private:
     // Initialize the MOOS coordinate conversion utility
-    CMOOSGeodesy m_Geodesy;
+    //CMOOSGeodesy m_Geodesy;
 
     // Global variables filled by the .moos file
 
     // Global variables
-    double dfLatOrigin;
-    double dfLonOrigin;
+    //double dfLatOrigin;
+    //double dfLonOrigin;
     double dfTimeNow;
 
     // Functions
@@ -256,6 +256,7 @@ bool CMOOS$1::OnStartUp()
   // Useful temporary variables
   std::string sVal;
 
+  /*
   // Get the latitude origin from the .moos file
   if (m_MissionReader.GetValue("LatOrigin", sVal)) 
   {
@@ -301,6 +302,9 @@ bool CMOOS$1::OnStartUp()
     MOOSPause(5000);
     exit(1);
   }
+  */
+
+  // Retrieve application-specific configuration parameters
 
   // Register for relevant MOOSdb variables
   DoRegistrations(); 
