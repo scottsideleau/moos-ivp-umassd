@@ -5,7 +5,8 @@ ProcessConfig = pWolfEncrypt
   CommsTick = 5
 
   //Configuration Parameters
-  key_length = 256
-  password   = cYb3r$3cUr3!
+  key_length     = 256
+  password       = cYb3r$3cUr3!
+  secret_message = "Hello, world!"
 }
 

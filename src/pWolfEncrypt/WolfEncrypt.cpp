@@ -25,7 +25,8 @@ CMOOSWolfEncrypt::CMOOSWolfEncrypt()
 {   
   // Initialization
   nKeyLength = 0;
-  sPassword = "initialized";
+  sPassword = "";
+  sSecretMessage = "";
 
   // Character classification and case convention reset to POSIX standard
   setlocale(LC_CTYPE, "");
@@ -97,14 +98,15 @@ bool CMOOSWolfEncrypt::Iterate()
   ///////////////////////
 
   // Create the plaintext container and fill it
-  std::ofstream osPlaintext;
-  osPlaintext.open( ".crypto/plaintext" );
-  osPlaintext << "Hello, World!" ;
-  osPlaintext.close();
+  std::ofstream fPlaintext;
+  fPlaintext.open( ".encrypt/plaintext",
+      std::ofstream::out | std::ofstream::trunc);
+  fPlaintext << sSecretMessage ;
+  fPlaintext.close();
   
   // Re-open the plaintext container (C-Style) to match WolfSSL interface
   FILE* plaintext;
-  plaintext = fopen( ".crypto/plaintext", "r" );
+  plaintext = fopen( ".encrypt/plaintext", "r" );
 
   // Debugging: Print the desired key length
   MOOSTrace("AES Key Length = %d \n", nKeyLength);
@@ -124,31 +126,22 @@ bool CMOOSWolfEncrypt::Iterate()
 
   // Create the Ciphertext container
   FILE* ciphertext;
-  ciphertext = fopen( ".crypto/ciphertext", "w" );
+  ciphertext = fopen( ".encrypt/ciphertext", "w" );
 
   // Fill the Ciphertext container with the encrypted data
-  int e = AesEncrypt(&aes, encKey, nKeyLength, plaintext, ciphertext);
-  MOOSTrace("Encryption Errors = %d \n", e);
+  int enc = AesEncrypt(&aes, encKey, nKeyLength, plaintext, ciphertext);
+  MOOSTrace("Encryption Errors = %d \n", enc);
 
-  ///////////////////////
-  // DECRYPTION (reverse)
-  ///////////////////////
+  //////////////////////////////////////////////////////
+  // POST SECRET_MESSAGE FOR CONSUMPTION BY pWolfDecrypt
+  //////////////////////////////////////////////////////
 
-  // Create the Cleartext container
-  FILE* cleartext;
-  cleartext = fopen( ".crypto/cleartext", "w" );
-
-  // Open the Ciphertext for reading
-  ciphertext = fopen( ".crypto/ciphertext", "r" );
-
-  // Generate the decryption key
-  unsigned char decKey[ sPassword.length() ];
-  copy( sPassword.begin(), sPassword.end(), decKey );
-  decKey[ sPassword.length() ] = 0;
- 
-  // Fill the Cleartext with the decoded Ciphertext
-  int d = AesDecrypt(&aes, decKey, nKeyLength, ciphertext, cleartext);
-  MOOSTrace("Decryption Errors = %d \n", d);
+  // Read the Ciphertext into a stringstream
+  std::ifstream fCipher( ".encrypt/ciphertext" );
+  std::stringstream ssCipher;
+  ssCipher << fCipher.rdbuf();
+  m_Comms.Notify("SECRET_MESSAGE", ssCipher.str());
+  fCipher.close();
 
   // Debug: Newline for terminal neatness
   MOOSTrace("\n");
@@ -239,6 +232,17 @@ bool CMOOSWolfEncrypt::OnStartUp()
   if (m_MissionReader.GetConfigurationParam("password", sVal))
   {
     sPassword = sVal;
+  }
+  else
+  {
+    MOOSTrace("password not set - FAIL\n");
+    MOOSPause(5000);
+    exit(1);
+  }
+
+  if (m_MissionReader.GetConfigurationParam("secret_message", sVal))
+  {
+    sSecretMessage = sVal;
   }
   else
   {
