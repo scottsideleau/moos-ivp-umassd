@@ -27,7 +27,7 @@ for ARGI; do
     elif [ "${ARGI}" = "--release" -o "${ARGI}" = "-r" ] ; then
         BUILD_TYPE="Release"
     else
-	CMD_LINE_ARGS=$CMD_LINE_ARGS" "$ARGI
+      CMD_LINE_ARGS=$CMD_LINE_ARGS" "$ARGI
     fi
 done
 
@@ -37,9 +37,9 @@ done
 
 cd build
 
-cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ../
+cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${CMD_LINE_ARGS} ../
 
-make ${CMD_LINE_ARGS}
+make 
 cd ${INVOCATION_ABS_DIR}
 
 

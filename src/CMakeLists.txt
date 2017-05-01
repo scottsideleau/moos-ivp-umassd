@@ -16,8 +16,10 @@ INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 #============================================================================
 #ADD_SUBDIRECTORY(lib_behaviors-test)
 ADD_SUBDIRECTORY(pMoosKiller)
-ADD_SUBDIRECTORY(pWolfEncrypt)
-ADD_SUBDIRECTORY(pWolfDecrypt)
+IF(BUILD_WOLFSSL)
+  ADD_SUBDIRECTORY(pWolfEncrypt)
+  ADD_SUBDIRECTORY(pWolfDecrypt)
+ENDIF()
 
 ##############################################################################
 #                           END of CMakeLists.txt

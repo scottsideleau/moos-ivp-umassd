@@ -117,6 +117,8 @@ ELSE( ${WIN32} )
 
 ENDIF( ${WIN32} )
 
+OPTION(BUILD_WOLFSSL "Build applications requiring WolfSSL" FALSE)
+
 #=============================================================================
 # Add Subdirectories
 #=============================================================================
