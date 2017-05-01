@@ -89,8 +89,8 @@ int AesEncrypt(Aes* aes, unsigned char* key, int size, FILE* inFile, FILE* outFi
         padCounter++;
     }
 
-    input = static_cast<unsigned char*>( malloc(length) );
-    output = static_cast<unsigned char*>( malloc(length) );
+    input = (unsigned char*)( malloc(length) );
+    output = (unsigned char*)( malloc(length) );
 
     ret = wc_InitRng(&rng);
     if (ret != 0) {
@@ -136,13 +136,12 @@ int AesEncrypt(Aes* aes, unsigned char* key, int size, FILE* inFile, FILE* outFi
     /* closes the opened files and frees the memory*/
     memset(input, 0, length);
     memset(output, 0, length);
-    memset(key, 0, size);
+    //memset(key, 0, size);
     free(input);
     free(output);
-    free(key);
+    //free(key);
     fclose(inFile);
     fclose(outFile);
-
     return ret;
 }
 
@@ -167,8 +166,8 @@ int AesDecrypt(Aes* aes, unsigned char* key, int size, FILE* inFile, FILE* outFi
     fseek(inFile, 0, SEEK_SET);
     aSize = length;
 
-    input = static_cast<unsigned char*>( malloc(aSize) );
-    output = static_cast<unsigned char*>( malloc(aSize) );
+    input = (unsigned char*)( malloc(aSize) );
+    output = (unsigned char*)( malloc(aSize) );
 
     wc_InitRng(&rng);
 
@@ -219,10 +218,10 @@ int AesDecrypt(Aes* aes, unsigned char* key, int size, FILE* inFile, FILE* outFi
     /* closes the opened files and frees the memory*/
     memset(input, 0, aSize);
     memset(output, 0, aSize);
-    memset(key, 0, size);
+    //memset(key, 0, size);
     free(input);
     free(output);
-    free(key);
+    //free(key);
     fclose(inFile);
     fclose(outFile);
 

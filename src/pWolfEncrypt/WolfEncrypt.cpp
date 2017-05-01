@@ -13,14 +13,9 @@ extern "C"
 
 // Standard Includes
 #include <cstdio>
-
-// MacOS Includes
-#ifdef __APPLE__
-  extern "C"
-  {
-    #include "MacOS/fmemopen.h"
-  }
-#endif
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 
 /*************************************************************************//**
@@ -30,7 +25,7 @@ CMOOSWolfEncrypt::CMOOSWolfEncrypt()
 {   
   // Initialization
   nKeyLength = 0;
-  sPassword = "";
+  sPassword = "initialized";
 
   // Character classification and case convention reset to POSIX standard
   setlocale(LC_CTYPE, "");
@@ -96,16 +91,67 @@ bool CMOOSWolfEncrypt::OnNewMail(MOOSMSG_LIST &NewMail)
  * Overloaded function called Every 1/Apptick to process data and do work.
  */
 bool CMOOSWolfEncrypt::Iterate()
-{   
-  FILE* ciphertext;
+{ 
+  ///////////////////////
+  // ENCRYPTION (forward)
+  ///////////////////////
+
+  // Create the plaintext container and fill it
+  std::ofstream osPlaintext;
+  osPlaintext.open( ".crypto/plaintext" );
+  osPlaintext << "Hello, World!" ;
+  osPlaintext.close();
+  
+  // Re-open the plaintext container (C-Style) to match WolfSSL interface
   FILE* plaintext;
+  plaintext = fopen( ".crypto/plaintext", "r" );
 
-  std::string sPlaintext = "Hello, World!";
-  plaintext = fmemopen(static_cast<void*>(&sPlaintext), sPlaintext.length(), "r");
+  // Debugging: Print the desired key length
+  MOOSTrace("AES Key Length = %d \n", nKeyLength);
 
-  AesEncrypt(&aes, (unsigned char*)sPassword.c_str(), nKeyLength, plaintext, 
-      ciphertext);
+  // Debugging: Print the user supplied password
+  MOOSTrace("Password = " + sPassword + "\n");
 
+  // Generate the encryption key
+  //
+  //  How to copy a std::string to an unsigned char array
+  //    Accessed on: 29-APR-2017
+  //    URL: http://stackoverflow.com/questions/35322150/
+  //         how-to-copy-a-stdstring-to-unsigned-char-array
+  unsigned char encKey[ sPassword.length() ];
+  copy( sPassword.begin(), sPassword.end(), encKey );
+  encKey[ sPassword.length() ] = 0;
+
+  // Create the Ciphertext container
+  FILE* ciphertext;
+  ciphertext = fopen( ".crypto/ciphertext", "w" );
+
+  // Fill the Ciphertext container with the encrypted data
+  int e = AesEncrypt(&aes, encKey, nKeyLength, plaintext, ciphertext);
+  MOOSTrace("Encryption Errors = %d \n", e);
+
+  ///////////////////////
+  // DECRYPTION (reverse)
+  ///////////////////////
+
+  // Create the Cleartext container
+  FILE* cleartext;
+  cleartext = fopen( ".crypto/cleartext", "w" );
+
+  // Open the Ciphertext for reading
+  ciphertext = fopen( ".crypto/ciphertext", "r" );
+
+  // Generate the decryption key
+  unsigned char decKey[ sPassword.length() ];
+  copy( sPassword.begin(), sPassword.end(), decKey );
+  decKey[ sPassword.length() ] = 0;
+ 
+  // Fill the Cleartext with the decoded Ciphertext
+  int d = AesDecrypt(&aes, decKey, nKeyLength, ciphertext, cleartext);
+  MOOSTrace("Decryption Errors = %d \n", d);
+
+  // Debug: Newline for terminal neatness
+  MOOSTrace("\n");
 
   /* Success */
   return true;        
@@ -124,6 +170,7 @@ bool CMOOSWolfEncrypt::OnStartUp()
   // Useful temporary variables
   std::string sVal;
 
+  /*
   // Get the latitude origin from the .moos file
   if (m_MissionReader.GetValue("LatOrigin", sVal)) 
   {
@@ -169,6 +216,7 @@ bool CMOOSWolfEncrypt::OnStartUp()
     MOOSPause(5000);
     exit(1);
   }
+  */
 
   // Retrieve application-specific configuration parameters
   if (m_MissionReader.GetConfigurationParam("key_length", sVal)) 

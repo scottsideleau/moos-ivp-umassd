@@ -7,7 +7,7 @@
 
 // MOOS Includes
 #include "MOOS/libMOOS/MOOSLib.h"
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+//#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 
 // WolfSSL Includes
 #include <wolfssl/wolfcrypt/aes.h>
@@ -35,15 +35,15 @@ class CMOOSWolfEncrypt : public CMOOSApp
 
   private:
     // Initialize the MOOS coordinate conversion utility
-    CMOOSGeodesy m_Geodesy;
+    //CMOOSGeodesy m_Geodesy;
 
     // Global variables filled by the .moos file
     int nKeyLength;
     std::string sPassword;
 
     // Global variables
-    double dfLatOrigin;
-    double dfLonOrigin;
+    //double dfLatOrigin;
+    //double dfLonOrigin;
     double dfTimeNow;
 
     // WolfSSL variables
