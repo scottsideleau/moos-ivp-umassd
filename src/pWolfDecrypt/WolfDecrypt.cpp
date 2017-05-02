@@ -127,7 +127,6 @@ bool CMOOSWolfDecrypt::Iterate()
 		unsigned char decKey[ sPassword.length() ];
 		copy( sPassword.begin(), sPassword.end(), decKey );
 		decKey[ sPassword.length() ] = 0;
-    MOOSTrace("Created the password.\n");
 
 		// Fill the Cleartext with the decoded Ciphertext
 		int dec = AesDecrypt(&aes, decKey, nKeyLength, ciphertext, cleartext);
