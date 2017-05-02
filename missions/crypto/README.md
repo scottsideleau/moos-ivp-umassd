@@ -106,7 +106,7 @@ B. Run the workflow within a Docker container
 
   ```bash
   docker pull scottsideleau/moos-ivp-umassd
-  docker run scottsideleau/moos-ivp-umassd:reproducible 
+  docker run scottsideleau/moos-ivp-umassd:crypto
   cp `docker ps -alq`:/root/artifacts/secret_message.alog secret_message.alog
   cp `docker ps -alq`:/root/artifacts/plaintext plaintext
   cp `docker ps -alq`:/root/artifacts/ciphertext ciphertext
