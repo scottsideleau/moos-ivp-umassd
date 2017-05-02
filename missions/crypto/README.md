@@ -1,6 +1,5 @@
 # crypto
-## A reproducible workflow demonstrating AES encrypted message transfer between
-## two MOOS processes.
+## A reproducible workflow demonstrating AES encrypted message transfer between two MOOS processes.
 
 Using the 'alpha' mission from MOOS-IvP, create a workflow that demonstrates
 encrypted messaging between MOOS processes  in local simulation, Docker 
