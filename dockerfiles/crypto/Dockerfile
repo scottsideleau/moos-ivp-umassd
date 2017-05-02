@@ -15,9 +15,9 @@ RUN \
   cd wolfssl && \
   ./autogen.sh && \
   ./configure \
-			--disable-silent-rules \
+      --disable-silent-rules \
       --disable-dependency-tracking \
-			--disable-bump \
+      --disable-bump \
       --disable-examples \
       --disable-fortress \
       --disable-md5 \
@@ -55,7 +55,7 @@ RUN \
       --enable-ripemd \
       --enable-savesession \
       --enable-savecert \
-			--enable-sessioncerts \
+      --enable-sessioncerts \
       --enable-sha512 \
       --enable-sni \
       --enable-supportedcurves && \
