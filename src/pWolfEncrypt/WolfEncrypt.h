@@ -37,6 +37,7 @@ class CMOOSWolfEncrypt : public CMOOSApp
     int nKeyLength;
     std::string sPassword;
     std::string sSecretMessage;
+    bool bNewSecret;
 
     // Global variables
     double dfTimeNow;

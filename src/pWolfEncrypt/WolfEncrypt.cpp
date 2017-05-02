@@ -27,6 +27,7 @@ CMOOSWolfEncrypt::CMOOSWolfEncrypt()
   nKeyLength = 0;
   sPassword = "";
   sSecretMessage = "";
+  bNewSecret = false;
 
   // Character classification and case convention reset to POSIX standard
   setlocale(LC_CTYPE, "");
@@ -93,55 +94,66 @@ bool CMOOSWolfEncrypt::OnNewMail(MOOSMSG_LIST &NewMail)
  */
 bool CMOOSWolfEncrypt::Iterate()
 { 
-  ///////////////////////
-  // ENCRYPTION (forward)
-  ///////////////////////
+  if(bNewSecret)
+  {
+    ///////////////////////
+    // ENCRYPTION (forward)
+    ///////////////////////
 
-  // Create the plaintext container and fill it
-  std::ofstream fPlaintext;
-  fPlaintext.open( ".encrypt/plaintext",
-      std::ofstream::out | std::ofstream::trunc);
-  fPlaintext << sSecretMessage ;
-  fPlaintext.close();
-  
-  // Re-open the plaintext container (C-Style) to match WolfSSL interface
-  FILE* plaintext;
-  plaintext = fopen( ".encrypt/plaintext", "r" );
+    // Create the plaintext container and fill it
+    std::ofstream fPlaintext;
+    fPlaintext.open( ".encrypt/plaintext",
+        std::ofstream::out | std::ofstream::trunc);
+    fPlaintext << sSecretMessage ;
+    fPlaintext.close();
 
-  // Debugging: Print the desired key length
-  MOOSTrace("AES Key Length = %d \n", nKeyLength);
+    // Re-open the plaintext container (C-Style) to match WolfSSL interface
+    FILE* plaintext;
+    plaintext = fopen( ".encrypt/plaintext", "r" );
 
-  // Debugging: Print the user supplied password
-  MOOSTrace("Password = " + sPassword + "\n");
+    // Debugging: Print the desired key length
+    MOOSTrace("AES Key Length = %d \n", nKeyLength);
 
-  // Generate the encryption key
-  //
-  //  How to copy a std::string to an unsigned char array
-  //    Accessed on: 29-APR-2017
-  //    URL: http://stackoverflow.com/questions/35322150/
-  //         how-to-copy-a-stdstring-to-unsigned-char-array
-  unsigned char encKey[ sPassword.length() ];
-  copy( sPassword.begin(), sPassword.end(), encKey );
-  encKey[ sPassword.length() ] = 0;
+    // Debugging: Print the user supplied password
+    MOOSTrace("Password = " + sPassword + "\n");
 
-  // Create the Ciphertext container
-  FILE* ciphertext;
-  ciphertext = fopen( ".encrypt/ciphertext", "w" );
+    // Generate the encryption key
+    //
+    //  How to copy a std::string to an unsigned char array
+    //    Accessed on: 29-APR-2017
+    //    URL: http://stackoverflow.com/questions/35322150/
+    //         how-to-copy-a-stdstring-to-unsigned-char-array
+    unsigned char encKey[ sPassword.length() ];
+    copy( sPassword.begin(), sPassword.end(), encKey );
+    encKey[ sPassword.length() ] = 0;
 
-  // Fill the Ciphertext container with the encrypted data
-  int enc = AesEncrypt(&aes, encKey, nKeyLength, plaintext, ciphertext);
-  MOOSTrace("Encryption Errors = %d \n", enc);
+    // Create the Ciphertext container
+    FILE* ciphertext;
+    ciphertext = fopen( ".encrypt/ciphertext", "w" );
 
-  //////////////////////////////////////////////////////
-  // POST SECRET_MESSAGE FOR CONSUMPTION BY pWolfDecrypt
-  //////////////////////////////////////////////////////
+    // Fill the Ciphertext container with the encrypted data
+    int enc = AesEncrypt(&aes, encKey, nKeyLength, plaintext, ciphertext);
+    MOOSTrace("Encryption Errors = %d \n", enc);
 
-  // Read the Ciphertext into a stringstream
-  std::ifstream fCipher( ".encrypt/ciphertext" );
-  std::stringstream ssCipher;
-  ssCipher << fCipher.rdbuf();
-  m_Comms.Notify("SECRET_MESSAGE", ssCipher.str());
-  fCipher.close();
+    //////////////////////////////////////////////////////
+    // POST SECRET_MESSAGE FOR CONSUMPTION BY pWolfDecrypt
+    //////////////////////////////////////////////////////
+
+    // Read the Ciphertext into a stringstream
+    std::ifstream fCipher( ".encrypt/ciphertext" );
+    std::stringstream ssCipher;
+    ssCipher << fCipher.rdbuf();
+    m_Comms.Notify("SECRET_MESSAGE", ssCipher.str());
+    fCipher.close();
+
+    // Reset
+    bNewSecret = false;
+  }
+  else
+  {
+    MOOSTrace("Waiting for a secret message to encrypt...\n");
+  }
+
 
   // Debug: Newline for terminal neatness
   MOOSTrace("\n");
@@ -243,6 +255,7 @@ bool CMOOSWolfEncrypt::OnStartUp()
   if (m_MissionReader.GetConfigurationParam("secret_message", sVal))
   {
     sSecretMessage = sVal;
+    bNewSecret = true;
   }
   else
   {
