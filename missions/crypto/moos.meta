@@ -1,0 +1,51 @@
+//----------------------------------------------------------------------------
+// MOOS File for UMassD Operations (generated)
+#include all.def
+#include plugs/data_errata.plug
+#include plugs/data_datum.plug
+
+//----------------------------------------------------------------------------
+ProcessConfig = ANTLER
+{
+    MSBetweenLaunches = 500
+
+    //Essential
+    Run = MOOSDB            @ NewConsole = $(POPUP)
+    #ifdef runtime
+    Run = iOceanServerComms @ NewConsole = $(POPUP)
+    #elseifdef simulation
+    Run = uSimMarine        @ NewConsole = $(POPUP)
+    Run = pMarinePID        @ NewConsole = $(POPUP)
+    Run = pMarineViewer     @ NewConsole = $(POPUP)
+    Run = pMoosKiller       @ NewConsole = $(POPUP)
+    #endif
+    Run = pHelmIvP          @ NewConsole = $(POPUP)
+
+    //Recommended
+    Run = pNodeReporter     @ NewConsole = $(POPUP)
+    Run = uProcessWatch     @ NewConsole = $(POPUP)
+
+    //Logging
+    Run = pLogger           @ NewConsole = $(POPUP)
+
+    //Secret Messaging
+    Run = pWolfEncrypt      @ NewConsole = $(POPUP)
+    Run = pWolfDecrypt      @ NewConsole = $(POPUP)
+}
+
+
+#ifdef runtime
+    #include plugs/app_iOceanServerComms.plug
+#elseifdef simulation
+    #include plugs/app_uSimMarine.plug
+    #include plugs/app_pMarinePID.plug
+    #include plugs/app_pMarineViewer.plug
+    #include plugs/app_pMoosKiller.plug
+#endif
+#include plugs/app_pHelmIvP.plug
+#include plugs/app_pNodeReporter.plug
+#include plugs/app_uProcessWatch.plug
+#include plugs/app_pWolfEncrypt.plug
+#include plugs/app_pWolfDecrypt.plug
+#include plugs/app_pLogger.plug
+

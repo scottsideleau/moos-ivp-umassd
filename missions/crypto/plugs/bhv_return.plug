@@ -1,0 +1,20 @@
+//----------------------------------------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = MODE == RETURN
+  perpetual  = true
+  duration   = no-time-limit
+  updates    = RETURN_POINTS
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = VEHICLE_UNDERWAY = false
+  endflag    = SEPPUKU = true
+
+         speed = 1.28611
+        radius = 2.0
+     nm_radius = 2.0
+        points = 45.577168,-22.230798
+}
+
