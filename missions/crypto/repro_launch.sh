@@ -1,8 +1,9 @@
 #! /bin/bash
 
 # Start by launching the simulation environment
-source simulation_launch.sh
 echo "Starting the MOOS-IvP environment."
+source simulation_launch.sh
+sleep 1
 
 # Wait for the IvP Helm to start
 until [ "$(pgrep pHelmIvP)" ]; do
@@ -13,6 +14,7 @@ done
 # Engage the IvP Helm (quietly)
 echo "Starting the MOOS-IvP mission."
 source scripts/engage_ivphelm.sh >& /dev/null &
+sleep 1
 while [ "$(pgrep uPokeDB)" ]; do
   echo "Engaging the IvP Helm..."
   sleep 1
@@ -20,6 +22,7 @@ done
 
 # Release control to the IvP Helm (quietly)
 source scripts/release_control.sh >& /dev/null &
+sleep 1
 while [ "$(pgrep uPokeDB)" ]; do
   echo "Releasing control to the IvP Helm..."
   sleep 1
