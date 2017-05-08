@@ -1,12 +1,12 @@
 #!/bin/bash
 
 INVOCATION_ABS_DIR=`pwd`
-BUILD_TYPE="None"
+BUILD_TYPE="Debug"
 CMD_LINE_ARGS=""
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #  Part 1: Check for and handle command-line arguments
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 for ARGI; do
     if [ "${ARGI}" = "--help" -o "${ARGI}" = "-h" ] ; then
 	printf "%s [SWITCHES]                       \n" $0
@@ -31,15 +31,24 @@ for ARGI; do
     fi
 done
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #  Part 2: Invoke the call to make in the build directory
-#-------------------------------------------------------------------
-
+#-----------------------------------------------------------------------------
 cd build
 
 cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${CMD_LINE_ARGS} ../
 
-make 
-cd ${INVOCATION_ABS_DIR}
+# Make the build faster by using multiple jobs
+NUM_THREADS="$(getconf _NPROCESSORS_ONLN)"
+MAKE_ARGS=""
+if [ ! -z "${NUM_THREADS}" ] ; then
+  MAKE_ARGS="--jobs=${NUM_THREADS}"
+fi
 
+# Issue the CMake commands to build the source.
+cmake ..
+echo "Running make with: ${MAKE_ARGS}"
+make ${MAKE_ARGS}
+
+cd ${INVOCATION_ABS_DIR}
 

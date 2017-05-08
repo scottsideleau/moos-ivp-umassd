@@ -1,15 +1,15 @@
-#===========================================================================
+#==============================================================================
 # FILE:  moos-ivp-umassd/CMakeLists.txt
-# DATE:  2015/12/22
+# DATE:  08-MAY-2017
 # INFO:  Top-level CMakeLists.txt file for the moos-ivp-umassd project
-#===========================================================================
+#==============================================================================
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT( IVP_UMASSD )
 
-#=============================================================================
+#==============================================================================
 # Set the output directories for the binary and library files
-#=============================================================================
+#==============================================================================
 
 GET_FILENAME_COMPONENT(IVP_UMASSD_BIN_DIR "${CMAKE_SOURCE_DIR}/bin"  ABSOLUTE )
 GET_FILENAME_COMPONENT(IVP_UMASSD_LIB_DIR "${CMAKE_SOURCE_DIR}/lib"  ABSOLUTE )
@@ -21,22 +21,22 @@ SET( LIBRARY_OUTPUT_DIRECTORY "${IVP_UMASSD_LIB_DIR}" CACHE PATH "" )
 SET( EXECUTABLE_OUTPUT_PATH    "${IVP_UMASSD_BIN_DIR}" CACHE PATH "" )
 SET( RUNTIME_OUTPUT_DIRECTORY "${IVP_UMASSD_BIN_DIR}"  CACHE PATH "" )
 
-#=============================================================================
+#==============================================================================
 # Find MOOS
-#=============================================================================
+#==============================================================================
 find_package(MOOS 10.0)
 INCLUDE_DIRECTORIES(${MOOS_INCLUDE_DIRS})
 
-#===============================================================================
+#==============================================================================
 # FINDING MOOSGeodesy' HEADERS AND LIBRARIES...
-#===============================================================================
+#==============================================================================
 find_package(MOOSGeodesy)
 include_directories(${MOOSGeodesy_INCLUDE_DIRS})
 link_directories(${MOOSGeodesy_LIBRARY_PATH})
 
-#=============================================================================
+#==============================================================================
 # Find the "moos-ivp" base directory
-#=============================================================================
+#==============================================================================
 
 # Search for the moos-ivp folder
 find_path( MOOSIVP_SOURCE_TREE_BASE
@@ -123,3 +123,4 @@ OPTION(BUILD_WOLFSSL "Build applications requiring WolfSSL" FALSE)
 # Add Subdirectories
 #=============================================================================
 ADD_SUBDIRECTORY( src )
+
