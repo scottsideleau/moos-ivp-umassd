@@ -6,11 +6,8 @@
 
 
 #============================================================================
-# Add the libraries in the current directory to the include path
+# Add dependencies, as required
 #============================================================================
-FILE(GLOB LOCAL_LIBRARY_DIRS ./lib_*)
-INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
-
 IF(BUILD_DCCL)
 	FIND_PACKAGE(Protobuf REQUIRED)
 	INCLUDE_DIRECTORIES(${Protobuf_INCLUDE_DIRS})
@@ -25,8 +22,13 @@ IF(BUILD_DCCL)
 		SET(PROTOBUF_INCLUDE_DIRS ${PROTOBUF_INCLUDE_DIRS} ${DCCL_INCLUDE_DIR})
 		SET(PROTOBUF_IMPORT_DIRS ${PROTOBUF_IMPORT_DIRS} ${DCCL_INCLUDE_DIR})
 	ENDIF() 
-
 ENDIF(BUILD_DCCL)
+
+#============================================================================
+# Add the libraries in the current directory to the include path
+#============================================================================
+FILE(GLOB LOCAL_LIBRARY_DIRS ./lib_*)
+INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 
 #============================================================================
 # List the subdirectories to build...
