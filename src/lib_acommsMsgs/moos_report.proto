@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+import "dccl/protobuf/option_extensions.proto";
+import "dccl/arithmetic/protobuf/arithmetic_extensions.proto";
+
+//NODE_REPORT = "NAME=henry,TYPE=uuv,TIME=1195844687.236,X=37.49,Y=-47.36,
+//              SPD=2.40,HDG=11.17,LAT=43.82507169,LON=-70.33005531,
+//              TYPE=KAYAK,MODE=DRIVE,ALLSTOP=clear,index=36,DEP=0,LENGTH=4"
+
+message moos_report
+{
+  option (dccl.msg).id        = 20;
+  option (dccl.msg).max_bytes = 32;
+
+  optional string NAME = 1 [(dccl.field).max_length=10];
+
+  optional VehicleType TYPE = 2;
+
+  required double TIME = 3 [(dccl.field).codec="_time", 
+                            (dccl.field).in_head=true];
+
+  required double X = 4 [(dccl.field).max=10000,
+                         (dccl.field).min=-10000,
+                         (dccl.field).precision=0];
+  required double Y = 5 [(dccl.field).max=10000,
+                         (dccl.field).min=-10000,
+                         (dccl.field).precision=0]; 
+
+  required double SPD = 6 [(dccl.field).max=5.0,
+                           (dccl.field).min=-1.0,
+                           (dccl.field).precision=1];
+
+  required double HDG = 7 [(dccl.field).max=360,
+                               (dccl.field).min=0,
+                               (dccl.field).precision=1];
+
+  optional double DEP = 8 [default = 0,
+                             (dccl.field).max=100.0,
+                             (dccl.field).min=0.0,
+                             (dccl.field).precision=1];
+
+  // Type of vehicle for a given node
+  enum VehicleType 
+  { 
+    UNKNOWN = 0;
+    UUV = 1;
+    USV = 2;
+    SHIP = 3;
+    GLIDER = 4;
+    TARGET = 5;
+    BUOY = 6;
+    OTHER = -1; 
+  }
+
+}
