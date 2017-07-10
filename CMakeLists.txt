@@ -102,9 +102,9 @@ ELSE( ${WIN32} )
    ENDIF()
 
    SET(WALL_ON ON CACHE BOOL 
-     "tell me about all compiler warnings (-Wall -Wextra -Wpedantic)")
+     "tell me about all compiler warnings (-Wall -Wextra)")
    IF(WALL_ON)
-     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
    ENDIF(WALL_ON)
 
    SET( DEBUG_ON ON CACHE BOOL
