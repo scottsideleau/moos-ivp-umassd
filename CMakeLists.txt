@@ -89,24 +89,22 @@ ELSE( ${WIN32} )
    # AFAIK, CMake gets that right when building shared objects. -CJC
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
-   include(CheckCXXCompilerFlag)
+   INCLUDE(CheckCXXCompilerFlag)
    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
    CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-   if(COMPILER_SUPPORTS_CXX11)
-     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-     message("${CMAKE_CXX_COMPILER} supports: -std=c++11")
-   elseif(COMPILER_SUPPORTS_CXX0X)
-     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-     message("${CMAKE_CXX_COMPILER} supports: -std=c++0x")
-   else()
-     message("${CMAKE_CXX_COMPILER} has no C++11 support.")
-     message(">> Please use a different C++ compiler.")
-   endif()
+   IF(COMPILER_SUPPORTS_CXX11)
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+   ELSEIF(COMPILER_SUPPORTS_CXX0X)
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+   ELSE()
+     MESSAGE("${CMAKE_CXX_COMPILER} has no C++11 support.")
+     MESSAGE(">> Please use a different C++ compiler.")
+   ENDIF()
 
    SET(WALL_ON ON CACHE BOOL 
-     "tell me about all compiler warnings (-Wall)")
+     "tell me about all compiler warnings (-Wall -Wextra -Wpedantic)")
    IF(WALL_ON)
-     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
    ENDIF(WALL_ON)
 
    SET( DEBUG_ON ON CACHE BOOL
@@ -118,6 +116,7 @@ ELSE( ${WIN32} )
 ENDIF( ${WIN32} )
 
 OPTION(BUILD_WOLFSSL "Build applications requiring WolfSSL" FALSE)
+OPTION(BUILD_DCCL "Build libraries requiring DCCL" FALSE)
 
 #=============================================================================
 # Add Subdirectories
