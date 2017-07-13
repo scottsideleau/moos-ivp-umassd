@@ -41,6 +41,7 @@ A. Run the workflow using MOOS-IvP on local machine
   ```bash
   brew install git cmake wolfssl
   ```
+  
   NOTE: You may need to manually set flags on the WolfSSL library (e.g. --enable-pwdbased).
 
   2. Install [MOOS-IvP](http://moos-ivp.org) on your local computer.
