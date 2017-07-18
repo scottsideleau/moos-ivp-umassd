@@ -1,0 +1,76 @@
+Index: src/lib_anrp_util/sutil.h
+===================================================================
+--- src/lib_anrp_util/sutil.h	(revision 23)
++++ src/lib_anrp_util/sutil.h	(working copy)
+@@ -32,13 +32,13 @@
+ 	else return false;
+ }
+ 
+-static inline double stof(const std::string &s) {
++/*static inline double stof(const std::string &s) {
+ 	return atof(s.c_str());
+-}
++}*/
+ 
+-static inline int stoi(const std::string &s) {
++/*static inline int stoi(const std::string &s) {
+ 	return atoi(s.c_str());
+-}
++}*/
+ 
+ template<class container, class difftype>
+ void T_find_and_replace(container &s, const container &f, const container &r)
+Index: src/lib_anrp_util/CnServerTCPSocket.cpp
+===================================================================
+--- src/lib_anrp_util/CnServerTCPSocket.cpp	(revision 23)
++++ src/lib_anrp_util/CnServerTCPSocket.cpp	(working copy)
+@@ -50,7 +50,7 @@
+ 	UnlockResolver();
+ 	memset(madr.sin_zero, 0, 8);
+ 
+-	if(bind(listen_fd, (struct sockaddr *)&madr, sizeof(struct sockaddr)) == -1) {
++	if(::bind(listen_fd, (struct sockaddr *)&madr, sizeof(struct sockaddr)) == -1) {
+ 		throw runtime_error(ssp("error binding: %s", strerror(errno)));
+ 	}
+ 	
+Index: src/lib_anrp_util/CnUDPSocket.cpp
+===================================================================
+--- src/lib_anrp_util/CnUDPSocket.cpp	(revision 23)
++++ src/lib_anrp_util/CnUDPSocket.cpp	(working copy)
+@@ -32,7 +32,7 @@
+ 	memset(&(their_addr.sin_zero), 0, 8);
+ 
+ 	setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(int));
+-	if(bind(fd, (struct sockaddr *)&any_addr, sizeof(struct sockaddr)) == -1) {
++	if(::bind(fd, (struct sockaddr *)&any_addr, sizeof(struct sockaddr)) == -1) {
+ 		throw runtime_error(ssp("CnUDPSocket: cannot bind: %s", strerror(errno)));
+ 	}
+ 	setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(int));
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 23)
++++ CMakeLists.txt	(working copy)
+@@ -108,7 +108,23 @@
+       IF(WALL_ON)
+          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+       ENDIF( WALL_ON)
++
++     include(CheckCXXCompilerFlag)
++     CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
++     CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
++     if(COMPILER_SUPPORTS_CXX11)
++       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++       message(STATUS "${CMAKE_CXX_COMPILER} supports: -std=c++11")
++     elseif(COMPILER_SUPPORTS_CXX0X)
++       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
++       message(STATUS "${CMAKE_CXX_COMPILER} supports: -std=c++0x")
++     else()
++       message(STATUS "${CMAKE_CXX_COMPILER} has no C++11 support.")
++       message(STATUS ">> Please use a different C++ compiler.")
++     endif()
++
+    ELSE(CMAKE_COMPILER_IS_GNUCXX)
++      # Flags for the Clang C++ Compiler
+     
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+ 
