@@ -103,8 +103,8 @@ B. Run the workflow within a Docker container
 
   ```bash
   docker pull scottsideleau/moos-ivp-umassd
-  docker run scottsideleau/moos-ivp-umassd:reproducibledocker 
-  cp `docker ps -alq`:/root/artifacts/repro.png repro.png
+  docker run scottsideleau/moos-ivp-umassd:reproducible
+  docker cp `docker ps -alq`:/root/artifacts/repro.png repro.png
   ```
   TROUBLESHOOTING: If the workflow gets hung up waiting on the IvP Helm, it
   may be necessary to stop the Docker instance and try again.  You can stop the
