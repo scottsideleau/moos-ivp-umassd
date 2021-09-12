@@ -19,28 +19,18 @@ CMOOSSimpleRobot::CMOOSSimpleRobot()
   nTimeWarp = 0;
   nAppTick = 0;
   dfTimeNow = -1.0;
-  dfStartHeading = 0.0;
-  dfStartSpeed = 0.0;
-  dfStartDepth = 0.0;
-  dfStartX = 0.0;
-  dfPrevX = 0.0;
   dfNextX = 0.0;
-  dfStartY = 0.0;
-  dfPrevY = 0.0;
   dfNextY = 0.0;
   dfRateHeading = 0.0;
   dfRateSpeed = 0.0;
   dfRateDepth = 0.0;
   dfDesiredHeading = 0.0;
-  dfPrevHeading = 0.0;
   dfNextHeading = 0.0;
   dfIncHeading = 0.0;
   dfDesiredSpeed = 0.0;
-  dfPrevSpeed = 0.0;
   dfNextSpeed = 0.0;
   dfIncSpeed = 0.0;
   dfDesiredDepth = 0.0;
-  dfPrevDepth = 0.0;
   dfNextDepth = 0.0;
   dfIncDepth = 0.0;
   bHeadingIsCurrent = true;
@@ -95,16 +85,19 @@ bool CMOOSSimpleRobot::OnNewMail(MOOSMSG_LIST &NewMail)
     if (Message.m_sKey == "DESIRED_HEADING")
     {
       dfDesiredHeading = Message.m_dfVal;
+      std::cout << "DESIRED_HEADING: " << dfDesiredHeading << std::endl;
       bHeadingIsCurrent = false;
     }
     else if (Message.m_sKey == "DESIRED_SPEED")
     {
       dfDesiredSpeed = Message.m_dfVal;
+      std::cout << "DESIRED_SPEED: " << dfDesiredSpeed << std::endl;
       bSpeedIsCurrent = false;
     }
     else if (Message.m_sKey == "DESIRED_DEPTH")
     {
       dfDesiredDepth = Message.m_dfVal;
+      std::cout << "DESIRED_DEPTH: " << dfDesiredDepth << std::endl;
       bDepthIsCurrent = false;
     }
   }
@@ -122,95 +115,113 @@ bool CMOOSSimpleRobot::Iterate()
   // Main
   dfTimeNow = MOOSTime();
 
-  if ( !bHeadingIsCurrent )
+  // Heading
+  if ( dfPrevHeading <= dfDesiredHeading )
   {
-    if ( dfPrevHeading <= dfDesiredHeading )
+    dfNextHeading = dfPrevHeading + dfIncHeading;
+    if ( dfNextHeading >= dfDesiredHeading )
     {
-      dfNextHeading = dfPrevHeading + dfIncHeading;
-      if ( dfNextHeading >= dfDesiredHeading )
-      {
-        dfNextHeading = dfDesiredHeading;
-      }
+      dfNextHeading = dfDesiredHeading;
     }
-    else
+  }
+  else
+  {
+    dfNextHeading = dfPrevHeading - dfIncHeading;
+    if ( dfNextHeading <= dfDesiredHeading )
     {
-      dfNextHeading = dfPrevHeading - dfIncHeading;
-      if ( dfNextHeading <= dfDesiredHeading )
-      {
-        dfNextHeading = dfDesiredHeading;
-      }
+      dfNextHeading = dfDesiredHeading;
     }
-    m_Comms.Notify( "NAV_HEADING", dfNextHeading, dfTimeNow );
-    std::cout << "NAV_HEADING: " << dfNextHeading << std::endl;
-    bHeadingIsCurrent = true;
+  }
+  m_Comms.Notify( "NAV_HEADING", dfNextHeading, dfTimeNow );
+  std::cout << "HEADING (prev, inc, next, desired): " \
+    << dfPrevHeading    << "  " \
+    << dfIncHeading     << "  " \
+    << dfNextHeading    << "  " \
+    << dfDesiredHeading << "  " \
+    << std::endl;
+  bHeadingIsCurrent = true;
+
+  // Speed
+  if ( dfPrevSpeed <= dfDesiredSpeed )
+  {
+    dfNextSpeed = dfPrevSpeed + dfIncSpeed;
+    if ( dfNextSpeed >= dfDesiredSpeed )
+    {
+      dfNextSpeed = dfDesiredSpeed;
+    }
+  }
+  else
+  {
+    dfNextSpeed = dfPrevSpeed - dfIncSpeed;
+    if ( dfNextSpeed <= dfDesiredSpeed )
+    {
+      dfNextSpeed = dfDesiredSpeed;
+    }
+  }
+  m_Comms.Notify( "NAV_SPEED", dfNextSpeed, dfTimeNow );
+  std::cout << "SPEED (prev, inc, next, desired): " \
+    << dfPrevSpeed    << "  " \
+    << dfIncSpeed     << "  " \
+    << dfNextSpeed    << "  " \
+    << dfDesiredSpeed << "  " \
+    << std::endl;
+  bSpeedIsCurrent = true;
+
+  // Depth
+  if ( dfPrevDepth <= dfDesiredDepth )
+  {
+    dfNextDepth = dfPrevDepth + dfIncDepth;
+    if ( dfNextDepth >= dfDesiredDepth )
+    {
+      dfNextDepth = dfDesiredDepth;
+    }
+  }
+  else
+  {
+    dfNextDepth = dfPrevDepth - dfIncDepth;
+    if ( dfNextDepth <= dfDesiredDepth )
+    {
+      dfNextDepth = dfDesiredDepth;
+    }
+  }
+  m_Comms.Notify( "NAV_DEPTH", dfNextDepth, dfTimeNow );
+  std::cout << "DEPTH (prev, inc, next, desired): " \
+    << dfPrevDepth    << "  " \
+    << dfIncDepth     << "  " \
+    << dfNextDepth    << "  " \
+    << dfDesiredDepth << "  " \
+    << std::endl;
+  bDepthIsCurrent = true;
+
+  // X, Y
+  double distance = dfNextSpeed * dfIncTime;
+  std::cout << "Time Inc: " << dfIncTime << std::endl;
+  std::cout << "Distance: " << distance << std::endl;
+
+  double dfStandardAngle = 90.0 - dfNextHeading;
+  if ( dfStandardAngle < 0.0 )
+  {
+    dfStandardAngle += 360.0;
+  }
+  if ( dfStandardAngle >= 360.0 )
+  {
+    dfStandardAngle -= 360.0;
   }
 
-  if ( !bSpeedIsCurrent )
-  {
-    if ( dfPrevSpeed <= dfDesiredSpeed )
-    {
-      dfNextSpeed = dfPrevSpeed + dfIncSpeed;
-      if ( dfNextSpeed >= dfDesiredSpeed )
-      {
-        dfNextSpeed = dfDesiredSpeed;
-      }
-    }
-    else
-    {
-      dfNextSpeed = dfPrevSpeed - dfIncSpeed;
-      if ( dfNextSpeed <= dfDesiredSpeed )
-      {
-        dfNextSpeed = dfDesiredSpeed;
-      }
-    }
-    m_Comms.Notify( "NAV_SPEED", dfNextSpeed, dfTimeNow );
-    std::cout << "NAV_SPEED: " << dfNextSpeed << std::endl;
-    bSpeedIsCurrent = true;
-  }
+  dfNextX = dfPrevX + ( distance * cos( dfStandardAngle * M_PI_2  ) );
+  m_Comms.Notify( "NAV_X", dfNextX, dfTimeNow );
+  std::cout << "NAV_X: " << dfNextX << std::endl;
 
-  if ( !bDepthIsCurrent )
-  {
-    if ( dfPrevDepth <= dfDesiredDepth )
-    {
-      dfNextDepth = dfPrevDepth + dfIncDepth;
-      if ( dfNextDepth >= dfDesiredDepth )
-      {
-        dfNextDepth = dfDesiredDepth;
-      }
-    }
-    else
-    {
-      dfNextDepth = dfPrevDepth - dfIncDepth;
-      if ( dfNextDepth <= dfDesiredDepth )
-      {
-        dfNextDepth = dfDesiredDepth;
-      }
-    }
-    m_Comms.Notify( "NAV_DEPTH", dfNextDepth, dfTimeNow );
-    std::cout << "NAV_DEPTH: " << dfNextDepth << std::endl;
-    bDepthIsCurrent = true;
-  }
+  dfNextY = dfPrevY + ( distance * sin( dfStandardAngle * M_PI_2 ) );
+  m_Comms.Notify( "NAV_Y", dfNextY, dfTimeNow );
+  std::cout << "NAV_Y: " << dfNextY << std::endl;
 
-  if ( bHeadingIsCurrent && bSpeedIsCurrent )
-  {
-    double distance = dfNextSpeed * dfIncTime;
-    std::cout << "Time Inc: " << dfIncTime << std::endl;
-    std::cout << "Distance: " << distance << std::endl;
-
-    dfNextX = dfPrevX + 5 + ( distance * \
-        cos( ( dfNextHeading * M_PI_2 )  ) );
-    m_Comms.Notify( "NAV_X", dfNextX, dfTimeNow );
-
-    dfNextY = dfPrevY + 5 + (distance * \
-        sin( ( dfNextHeading * M_PI_2 ) ) );
-    m_Comms.Notify( "NAV_Y", dfNextY, dfTimeNow );
-
-    dfPrevHeading = dfNextHeading;
-    dfPrevSpeed = dfNextSpeed;
-    dfPrevDepth = dfNextDepth;
-    dfPrevX = dfNextX;
-    dfPrevY = dfNextY;
-  }
+  // Prepare for Next Time Step
+  dfPrevHeading = dfNextHeading;
+  dfPrevSpeed = dfNextSpeed;
+  dfPrevDepth = dfNextDepth;
+  dfPrevX = dfNextX;
+  dfPrevY = dfNextY;
 
   /* Success */
   return true;        
@@ -229,75 +240,73 @@ bool CMOOSSimpleRobot::OnStartUp()
   // Useful temporary variables
   dfTimeNow = MOOSTime();
   std::string sVal;
-
-  if (m_MissionReader.GetValue("MOOSTimeWarp", sVal)) 
+  
+  // Retrieve global .moos configuration parameters
+  if ( m_MissionReader.GetValue( "MOOSTimeWarp", sVal ) ) 
   {
-    nTimeWarp = std::stoi( sVal.c_str() );
+    nTimeWarp = std::stoi( sVal );
   }
   else 
   {
     nTimeWarp = 1;
   } 
 
-  // Retrieve application-specific configuration parameters
-  //   start_heading, start_speed, start_depth, start_x, start_y
-  //   rate_heading, rate_speed, rate_depth
+  // Retrieve application-specific .moos configuration parameters
   if ( m_MissionReader.GetConfigurationParam( "AppTick", sVal ) )
   {
     nAppTick = std::stoi( sVal );
     dfIncTime = ( 1 / static_cast<double>( nAppTick ) ) \
           * static_cast<double>( nTimeWarp );
   }
-  else if ( m_MissionReader.GetConfigurationParam( "start_heading", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "start_heading", sVal ) )
   {
-    char* pEnd;
-    dfStartHeading = std::strtod( sVal.c_str(), &pEnd );
+    dfStartHeading = std::stod( sVal );
     dfPrevHeading = dfStartHeading;
   }
-  else if ( m_MissionReader.GetConfigurationParam( "start_speed", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "start_speed", sVal ) )
   {
-    char* pEnd;
-    dfStartSpeed = std::strtod( sVal.c_str(), &pEnd );
+    dfStartSpeed = std::stod( sVal );
     dfPrevSpeed = dfStartSpeed;
   }
-  else if ( m_MissionReader.GetConfigurationParam( "start_depth", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "start_depth", sVal ) )
   {
-    char* pEnd;
-    dfStartDepth = std::strtod( sVal.c_str(), &pEnd );
+    dfStartDepth = std::stod( sVal );
     dfPrevDepth = dfStartDepth;
   }
-  else if ( m_MissionReader.GetConfigurationParam( "start_x", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "start_x", sVal ) )
   {
-    char* pEnd;
-    dfStartX = std::strtod( sVal.c_str(), &pEnd );
+    dfStartX = std::stod( sVal );
     dfPrevX = dfStartX;
     m_Comms.Notify( "NAV_X", dfStartX, dfTimeNow );
   }
-  else if ( m_MissionReader.GetConfigurationParam( "start_y", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "start_y", sVal ) )
   {
-    char* pEnd;
-    dfStartY = std::strtod( sVal.c_str(), &pEnd );
+    dfStartY = std::stod( sVal );
     dfPrevY = dfStartY;
     m_Comms.Notify( "NAV_Y", dfStartY, dfTimeNow );
   }
-  else if ( m_MissionReader.GetConfigurationParam( "rate_heading", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "rate_heading", sVal ) )
   {
-    char* pEnd;
-    dfRateHeading = std::strtod( sVal.c_str(), &pEnd );
-    dfIncHeading = dfRateDepth * dfIncTime;
+    dfRateHeading = std::stod( sVal );
+    dfIncHeading = dfRateHeading * dfIncTime;
   }
-  else if ( m_MissionReader.GetConfigurationParam( "rate_speed", sVal ) )
+
+  if ( m_MissionReader.GetConfigurationParam( "rate_speed", sVal ) )
   {
-    char* pEnd;
-    dfRateSpeed = std::strtod( sVal.c_str(), &pEnd );
+    dfRateSpeed = std::stod( sVal );
     dfIncSpeed = dfRateSpeed * dfIncTime;
   }
-  else if ( m_MissionReader.GetConfigurationParam( "rate_depth", sVal ) )
-  {
-    char* pEnd;
-    dfRateDepth = std::strtod( sVal.c_str(), &pEnd );
-    dfIncDepth = dfRateDepth * dfIncTime;
 
+  if ( m_MissionReader.GetConfigurationParam( "rate_depth", sVal ) )
+  {
+    dfRateDepth = std::stod( sVal );
+    dfIncDepth = dfRateDepth * dfIncTime;
   }
 
   // Register for relevant MOOSdb variables
