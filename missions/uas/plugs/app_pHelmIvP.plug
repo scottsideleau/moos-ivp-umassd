@@ -1,0 +1,13 @@
+//----------------------------------------------------------------------------
+ProcessConfig = pHelmIvP
+{
+    AppTick   = 2
+    CommsTick = 5
+
+    Domain = course,0:359:7200
+    Domain = speed,0:20:400
+    Domain = depth,-200:0:4000:optional
+	
+    Behaviors = current.bhv
+}
+

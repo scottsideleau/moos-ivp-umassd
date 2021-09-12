@@ -1,0 +1,11 @@
+ServerHost = localhost
+ServerPort = 9000
+
+#ifdef simulation
+Simulator    = true
+MOOSTimeWarp = 1
+#elseifdef runtime
+Simulator = false
+#endif
+
+Community = $(VEHICLE_NAME)

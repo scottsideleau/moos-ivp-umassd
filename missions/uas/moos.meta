@@ -1,0 +1,41 @@
+//----------------------------------------------------------------------------
+// MOOS File for UMassD Operations (generated)
+#include all.def
+#include plugs/data_errata.plug
+#include plugs/data_datum.plug
+
+//----------------------------------------------------------------------------
+ProcessConfig = ANTLER
+{
+    MSBetweenLaunches = 200
+
+    //Essential
+    Run = MOOSDB            @ NewConsole = $(POPUP)
+    #ifdef runtime
+    Run = iOceanServerComms @ NewConsole = $(POPUP)
+    #elseifdef simulation
+    Run = uSimpleRobot        @ NewConsole = $(POPUP)
+    Run = pMarineViewer     @ NewConsole = $(POPUP)
+    #endif
+    Run = pHelmIvP          @ NewConsole = $(POPUP)
+
+    //Recommended
+    Run = pNodeReporter     @ NewConsole = $(POPUP)
+    Run = uProcessWatch     @ NewConsole = $(POPUP)
+
+    //Logging
+    Run = pLogger           @ NewConsole = $(POPUP)
+}
+
+
+#ifdef runtime
+    #include plugs/app_iOceanServerComms.plug
+#elseifdef simulation
+    #include plugs/app_uSimpleRobot.plug
+    #include plugs/app_pMarineViewer.plug
+#endif
+#include plugs/app_pHelmIvP.plug
+#include plugs/app_pNodeReporter.plug
+#include plugs/app_uProcessWatch.plug
+#include plugs/app_pLogger.plug
+

@@ -1,0 +1,35 @@
+//----------------------------------------------------------------------------
+ProcessConfig = iOceanServerComms
+{
+    AppTick   = 1
+    CommsTick = 5
+	
+    //Frontseat Serial Port Configuration
+    port        = /dev/ttyS12
+    BaudRate    = 19200
+    handshaking = false
+    streaming   = false
+	
+    //Use Local UTM coordinate system?
+    UTM = false
+
+    //Request data from DVL?
+    DVL = true
+
+    //Request general CTD data?
+    CTD = true
+
+    //Request data string from YSI Sonde?
+    YSI = false
+
+    //Are we in salt water?  (Used for YSI sound velocity calculation.)
+    SaltWater = false
+
+    //Post NAV_* variables?
+    PostNav = true
+
+    //Constraints
+    CommTimeout =  2 //seconds
+    ServoFilter =  0 //ticks
+}
+

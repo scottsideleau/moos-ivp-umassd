@@ -1,0 +1,6 @@
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   VEHICLE_UNDERWAY = false
+#ifdef simulation
+initialize   HSLINE = off
+#endif
