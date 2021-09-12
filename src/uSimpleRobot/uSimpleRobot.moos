@@ -10,7 +10,7 @@ ProcessConfig = uSimpleRobot
   start_x       = 0.0
   start_y       = 0.0
 
-  rate_heading  = 3.0   //degrees per sec
+  rate_heading  = 180.0 //degrees per sec
   rate_speed    = 2.5   //meters  per sec^2
   rate_depth    = 3.5   //meters  per sec
 }

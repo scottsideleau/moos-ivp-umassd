@@ -85,19 +85,16 @@ bool CMOOSSimpleRobot::OnNewMail(MOOSMSG_LIST &NewMail)
     if (Message.m_sKey == "DESIRED_HEADING")
     {
       dfDesiredHeading = Message.m_dfVal;
-      std::cout << "DESIRED_HEADING: " << dfDesiredHeading << std::endl;
       bHeadingIsCurrent = false;
     }
     else if (Message.m_sKey == "DESIRED_SPEED")
     {
       dfDesiredSpeed = Message.m_dfVal;
-      std::cout << "DESIRED_SPEED: " << dfDesiredSpeed << std::endl;
       bSpeedIsCurrent = false;
     }
     else if (Message.m_sKey == "DESIRED_DEPTH")
     {
       dfDesiredDepth = Message.m_dfVal;
-      std::cout << "DESIRED_DEPTH: " << dfDesiredDepth << std::endl;
       bDepthIsCurrent = false;
     }
   }
@@ -116,8 +113,10 @@ bool CMOOSSimpleRobot::Iterate()
   dfTimeNow = MOOSTime();
 
   // Heading
-  if ( dfPrevHeading <= dfDesiredHeading )
+  if ( ( dfPrevHeading <= dfDesiredHeading ) && \
+      ( abs( dfPrevHeading - dfDesiredHeading ) < 180.0 ) )
   {
+    // Turn Right (Starboard)
     dfNextHeading = dfPrevHeading + dfIncHeading;
     if ( dfNextHeading >= dfDesiredHeading )
     {
@@ -126,6 +125,7 @@ bool CMOOSSimpleRobot::Iterate()
   }
   else
   {
+    // Turn Left (Port)
     dfNextHeading = dfPrevHeading - dfIncHeading;
     if ( dfNextHeading <= dfDesiredHeading )
     {
@@ -195,8 +195,6 @@ bool CMOOSSimpleRobot::Iterate()
 
   // X, Y
   double distance = dfNextSpeed * dfIncTime;
-  std::cout << "Time Inc: " << dfIncTime << std::endl;
-  std::cout << "Distance: " << distance << std::endl;
 
   double dfStandardAngle = 90.0 - dfNextHeading;
   if ( dfStandardAngle < 0.0 )
@@ -207,14 +205,20 @@ bool CMOOSSimpleRobot::Iterate()
   {
     dfStandardAngle -= 360.0;
   }
+  double dfStandardAngleInRadians = dfStandardAngle * ( M_PI / 180.0 );
 
-  dfNextX = dfPrevX + ( distance * cos( dfStandardAngle * M_PI_2  ) );
+  dfNextX = dfPrevX + ( distance * cos( dfStandardAngleInRadians ) );
   m_Comms.Notify( "NAV_X", dfNextX, dfTimeNow );
-  std::cout << "NAV_X: " << dfNextX << std::endl;
 
-  dfNextY = dfPrevY + ( distance * sin( dfStandardAngle * M_PI_2 ) );
+  dfNextY = dfPrevY + ( distance * sin( dfStandardAngleInRadians ) );
   m_Comms.Notify( "NAV_Y", dfNextY, dfTimeNow );
-  std::cout << "NAV_Y: " << dfNextY << std::endl;
+
+  std::cout << "X, Y (time step, distance, x, y): " \
+    << dfIncTime << "  " \
+    << distance  << "  " \
+    << dfNextX   << "  " \
+    << dfNextY   << "  " \
+    << std::endl;
 
   // Prepare for Next Time Step
   dfPrevHeading = dfNextHeading;
@@ -222,6 +226,7 @@ bool CMOOSSimpleRobot::Iterate()
   dfPrevDepth = dfNextDepth;
   dfPrevX = dfNextX;
   dfPrevY = dfNextY;
+  std::cout << "--" << std::endl;
 
   /* Success */
   return true;        
