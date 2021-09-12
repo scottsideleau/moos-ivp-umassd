@@ -1,0 +1,17 @@
+//----------------------------------------------------------------------------
+ProcessConfig = uSimpleRobot
+{
+  AppTick   = 10
+  CommsTick = 20
+
+  start_heading = 0.0   //degrees
+  start_speed   = 0.0   //meters per sec
+  start_depth   = 0.0   //meters
+  start_x       = 0.0
+  start_y       = 0.0
+
+  rate_heading  = 3.0   //degrees per sec
+  rate_speed    = 2.5   //meters  per sec^2
+  rate_depth    = 3.5   //meters  per sec
+}
+
