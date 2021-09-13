@@ -1,0 +1,12 @@
+
+To use the dynamic loading of behaviors, you need to set the following 
+environment variable (in your .bashrc file for bash users, or in your
+.cshrc file for tcsh users)
+
+For bash users:
+export IVP_BEHAVIOR_DIRS=/path/to/moos-ivp-umassd/lib
+
+For tcsh users:
+setenv IVP_BEHAVIOR_DIRS '/path/to/moos-ivp-umassd/lib'
+
+

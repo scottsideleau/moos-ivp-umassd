@@ -23,7 +23,7 @@ Behavior = BHV_Waypoint
 }
 
 //----------------------------------------------------------------------------
-Behavior = BHV_ConstantDepth
+Behavior = BHV_SimpleDepth
 {
   name      = depth_survey
   pwt       = 100
