@@ -3,4 +3,4 @@
 #elseifdef runtime
     #define POPUP false
 #endif
-#define VEHICLE_NAME iver
+#define VEHICLE_NAME uav

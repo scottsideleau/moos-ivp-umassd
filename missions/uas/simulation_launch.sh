@@ -3,7 +3,7 @@
 RUNTYPE=simulation
 
 echo "//---------------------------------------------------------------------"
-echo "// Building & Launching the IVER Simulation"
+echo "// Building & Launching the Simple Robot Simulation"
 
 source scripts/launch.sh
 

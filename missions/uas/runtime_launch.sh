@@ -3,7 +3,7 @@
 RUNTYPE=runtime
 
 echo "//---------------------------------------------------------------------"
-echo "// Building & Launching the IVER Runtime"
+echo "// Building & Launching the Simple Robot runtime"
 
 source scripts/launch.sh
 
