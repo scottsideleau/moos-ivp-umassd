@@ -114,7 +114,7 @@ bool CMOOSSimpleRobot::Iterate()
 
   // Heading
   if ( ( dfPrevHeading <= dfDesiredHeading ) && \
-      ( abs( dfPrevHeading - dfDesiredHeading ) < 180.0 ) )
+      ( std::abs( dfPrevHeading - dfDesiredHeading ) < 180.0 ) )
   {
     // Turn Right (Starboard)
     dfNextHeading = dfPrevHeading + dfIncHeading;
