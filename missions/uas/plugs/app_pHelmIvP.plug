@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 ProcessConfig = pHelmIvP
 {
-    AppTick   = 2
-    CommsTick = 5
+    AppTick   = 8
+    CommsTick = 16
 
     Domain = course,0:359:7200
     Domain = speed,0:20:400

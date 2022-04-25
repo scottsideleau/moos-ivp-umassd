@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------
 ProcessConfig = pNodeReporter
 {
-    AppTick   = 5
-    CommsTick = 5
+    AppTick   = 8
+    CommsTick = 16
 
     VESSEL_TYPE = AUV
 }

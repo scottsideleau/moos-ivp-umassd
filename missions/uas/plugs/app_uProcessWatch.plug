@@ -2,7 +2,7 @@
 ProcessConfig = uProcessWatch
 {
     AppTick   = 1
-    CommsTick = 5
+    CommsTick = 4
 
     watch_all = antler
 }

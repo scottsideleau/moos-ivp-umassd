@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 ProcessConfig = uSimpleRobot
 {
-  AppTick   = 5
-  CommsTick = 10
+  AppTick   = 8
+  CommsTick = 16
 
   start_heading = 0.0   //degrees
   start_speed   = 0.0   //meters per sec
