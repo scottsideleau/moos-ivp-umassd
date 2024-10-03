@@ -64,6 +64,17 @@ LINK_DIRECTORIES(${IVP_LIBRARY_DIRS})
 #=============================================================================
 # Specify Compiler Flags
 #=============================================================================
+
+# Setup to use UTM Coordinates for converting X-Y into Lat-Lon.
+SET(USE_UTM ON CACHE BOOL "Use UTM coordinates vs Local coordinates.")
+IF(USE_UTM)
+   ADD_DEFINITIONS(-DUSE_UTM)
+   message("USING UTM")
+ELSE()
+   REMOVE_DEFINITIONS(-DUSE_UTM)
+   message("USING Local Grid")
+ENDIF(USE_UTM)
+
 IF( ${WIN32} )
    #---------------------------------------------
    # Windows Compiler Flags

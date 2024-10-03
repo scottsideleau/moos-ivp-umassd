@@ -16,6 +16,8 @@
 CMOOSSimpleRobot::CMOOSSimpleRobot()
 {   
   // Initialization
+  bGeoOk = false;
+  sPrefix = "NAV";
   nTimeWarp = 0;
   nAppTick = 0;
   dfTimeNow = -1.0;
@@ -132,7 +134,7 @@ bool CMOOSSimpleRobot::Iterate()
       dfNextHeading = dfDesiredHeading;
     }
   }
-  m_Comms.Notify( "NAV_HEADING", dfNextHeading, dfTimeNow );
+  m_Comms.Notify( sPrefix + "_HEADING", dfNextHeading, dfTimeNow );
   std::cout << "HEADING (prev, inc, next, desired): " \
     << dfPrevHeading    << "  " \
     << dfIncHeading     << "  " \
@@ -158,7 +160,7 @@ bool CMOOSSimpleRobot::Iterate()
       dfNextSpeed = dfDesiredSpeed;
     }
   }
-  m_Comms.Notify( "NAV_SPEED", dfNextSpeed, dfTimeNow );
+  m_Comms.Notify( sPrefix + "_SPEED", dfNextSpeed, dfTimeNow );
   std::cout << "SPEED (prev, inc, next, desired): " \
     << dfPrevSpeed    << "  " \
     << dfIncSpeed     << "  " \
@@ -184,7 +186,8 @@ bool CMOOSSimpleRobot::Iterate()
       dfNextDepth = dfDesiredDepth;
     }
   }
-  m_Comms.Notify( "NAV_DEPTH", dfNextDepth, dfTimeNow );
+  m_Comms.Notify( sPrefix + "_DEPTH", dfNextDepth, dfTimeNow );
+  m_Comms.Notify( sPrefix + "_ALTITUDE", -dfNextDepth, dfTimeNow );
   std::cout << "DEPTH (prev, inc, next, desired): " \
     << dfPrevDepth    << "  " \
     << dfIncDepth     << "  " \
@@ -208,10 +211,22 @@ bool CMOOSSimpleRobot::Iterate()
   double dfStandardAngleInRadians = dfStandardAngle * ( M_PI / 180.0 );
 
   dfNextX = dfPrevX + ( distance * cos( dfStandardAngleInRadians ) );
-  m_Comms.Notify( "NAV_X", dfNextX, dfTimeNow );
+  m_Comms.Notify( sPrefix + "_X", dfNextX, dfTimeNow );
 
   dfNextY = dfPrevY + ( distance * sin( dfStandardAngleInRadians ) );
-  m_Comms.Notify( "NAV_Y", dfNextY, dfTimeNow );
+  m_Comms.Notify( sPrefix + "_Y", dfNextY, dfTimeNow );
+
+  if (bGeoOk)
+  {
+    double lat=0.0, lon=0.0;
+#ifdef USE_UTM
+    m_geodesy.UTM2LatLong(dfNextX, dfNextY, lat, lon);
+#else
+    m_geodesy.LocalGrid2LatLong(dfNextX, dfNextY, lat, lon);
+#endif
+    Notify(sPrefix + "_LAT", lat, dfTimeNow);
+    Notify(sPrefix + "_LONG", lon, dfTimeNow);
+  }
 
   std::cout << "X, Y (time step, distance, x, y): " \
     << dfIncTime << "  " \
@@ -245,6 +260,25 @@ bool CMOOSSimpleRobot::OnStartUp()
   // Useful temporary variables
   dfTimeNow = MOOSTime();
   std::string sVal;
+
+  // Setup MOOS Geodesy
+  double latOrigin = 0.0, longOrigin = 0.0;
+  if(!m_MissionReader.GetValue("LatOrigin", latOrigin)) {
+    MOOSTrace("uSimpleRobot: LatOrigin not set in *.moos file.\n");
+    bGeoOk = false;
+  } 
+  else if(!m_MissionReader.GetValue("LongOrigin", longOrigin)) {
+    MOOSTrace("uSimpleRobot: LongOrigin not set in *.moos file\n");
+    bGeoOk = false;      
+  }
+  else {
+    bGeoOk = true;
+    // initialize m_geodesy
+    if(!m_geodesy.Initialise(latOrigin, longOrigin)) {
+      MOOSTrace("uSimpleRobot: Geodesy init failed.\n");
+      bGeoOk = false;
+    }
+  }
   
   // Retrieve global .moos configuration parameters
   if ( m_MissionReader.GetValue( "MOOSTimeWarp", sVal ) ) 
@@ -262,6 +296,11 @@ bool CMOOSSimpleRobot::OnStartUp()
     nAppTick = std::stoi( sVal );
     dfIncTime = ( 1 / static_cast<double>( nAppTick ) ) \
           * static_cast<double>( nTimeWarp );
+  }
+
+  if ( m_MissionReader.GetConfigurationParam( "prefix", sVal ) && !sVal.empty() )
+  {
+    sPrefix = sVal;
   }
 
   if ( m_MissionReader.GetConfigurationParam( "start_heading", sVal ) )
@@ -286,14 +325,14 @@ bool CMOOSSimpleRobot::OnStartUp()
   {
     dfStartX = std::stod( sVal );
     dfPrevX = dfStartX;
-    m_Comms.Notify( "NAV_X", dfStartX, dfTimeNow );
+    m_Comms.Notify( sPrefix + "_X", dfStartX, dfTimeNow );
   }
 
   if ( m_MissionReader.GetConfigurationParam( "start_y", sVal ) )
   {
     dfStartY = std::stod( sVal );
     dfPrevY = dfStartY;
-    m_Comms.Notify( "NAV_Y", dfStartY, dfTimeNow );
+    m_Comms.Notify( sPrefix + "_Y", dfStartY, dfTimeNow );
   }
 
   if ( m_MissionReader.GetConfigurationParam( "rate_heading", sVal ) )
