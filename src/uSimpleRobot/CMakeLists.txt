@@ -8,7 +8,7 @@ FILE(GLOB SRC *.cpp)
 ADD_EXECUTABLE(uSimpleRobot ${SRC})
 
 TARGET_LINK_LIBRARIES(uSimpleRobot
-    MOOS
+    MOOS::MOOS
     MOOSGeodesy
     m
     pthread)
