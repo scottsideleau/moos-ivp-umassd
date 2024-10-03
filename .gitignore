@@ -36,3 +36,6 @@
 *.exe
 *.out
 *.app
+
+# VS Code Configuration
+/.vscode

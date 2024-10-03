@@ -8,8 +8,8 @@ FILE(GLOB SRC *.cpp)
 ADD_EXECUTABLE(pWolfEncrypt ${SRC})
 
 TARGET_LINK_LIBRARIES(pWolfEncrypt
-    MOOS::MOOS
-    MOOSGeodesy
+    ${MOOS_LIBRARIES}
+    ${MOOSGeodesy_LIBRARIES}
     wolfssl
     m
     pthread)
