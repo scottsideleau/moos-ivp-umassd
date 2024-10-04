@@ -47,8 +47,7 @@ find_path( MOOSIVP_SOURCE_TREE_BASE
 )
 
 if (NOT MOOSIVP_SOURCE_TREE_BASE)
-    message("Please set MOOSIVP_SOURCE_TREE_BASE to  ")
-    message("the location of the \"moos-ivp\" folder ")
+    message(FATAL_ERROR "Please set MOOSIVP_SOURCE_TREE_BASE to the location of the \"moos-ivp\" folder.")
     return()
 endif()
 

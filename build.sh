@@ -37,6 +37,11 @@ done
 cd build
 
 cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${CMD_LINE_ARGS} ../
+if [ $? -ne 0 ] ; then
+  echo "ERROR! Failed to call cmake first time."
+  exit 1
+fi
+
 
 # Make the build faster by using multiple jobs
 NUM_THREADS="$(getconf _NPROCESSORS_ONLN)"
@@ -47,8 +52,17 @@ fi
 
 # Issue the CMake commands to build the source.
 cmake ..
+if [ $? -ne 0 ] ; then
+  echo "ERROR! Failed to call cmake second time."
+  exit 1
+fi
+
 echo "Running make with: ${MAKE_ARGS}"
 make ${MAKE_ARGS}
+if [ $? -ne 0 ] ; then
+  echo "ERROR! Failed to call make."
+  exit 1
+fi
 
 cd ${INVOCATION_ABS_DIR}
 

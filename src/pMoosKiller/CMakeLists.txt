@@ -8,7 +8,7 @@ FILE(GLOB SRC *.cpp)
 ADD_EXECUTABLE(pMoosKiller ${SRC})
 
 TARGET_LINK_LIBRARIES(pMoosKiller
-    MOOS
+    ${MOOS_LIBRARIES}
     m
     pthread)
 
