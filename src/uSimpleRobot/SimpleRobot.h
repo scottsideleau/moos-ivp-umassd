@@ -7,6 +7,7 @@
 
 // MOOS Includes
 #include "MOOS/libMOOS/App/MOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 
 
 /*************************************************************************//**
@@ -30,7 +31,10 @@ class CMOOSSimpleRobot : public CMOOSApp
     //bool OnDisconnectFromServer();        /* unused*/
 
   private:
+    CMOOSGeodesy m_geodesy;
+    bool bGeoOk;
     // Global variables filled by the .moos file
+    std::string sPrefix;
     double dfStartHeading;
     double dfStartSpeed;
     double dfStartDepth;
